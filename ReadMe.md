@@ -15,11 +15,14 @@ $$
 $$
 
 **detection metrics**  
-mAP (mean Average Precision)  
+
+mAP (mean Average Precision)
+
 $$
     mAP = \frac{1}{n} \sum_{}^{}{AP_{i}}
 $$  
-where $AP_{i}$ is the average precision for class $c_{i}$ and $n$ is the number of classes   
+
+where $AP_{i}$ is the average precision for class $c_{i}$ and $n$ is the number of classes  
 
 AP (Average Precision)  
 
