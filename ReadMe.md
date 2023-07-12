@@ -15,7 +15,7 @@ $$
 $$
 
 **detection metrics**  
-mAP (mean Average Precision)
+mAP (mean Average Precision)  
 $$
     mAP = \frac{1}{n} \sum_{}^{}{AP_{i}}
 $$  
