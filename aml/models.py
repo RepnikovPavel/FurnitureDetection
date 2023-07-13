@@ -3,7 +3,7 @@ import torch.nn as nn
 from torchsummary import summary
 from typing import Any
 
-class PolicyFuncmaker:
+class ModelBuilder:
     @staticmethod
     def create_sequential(resnet_):
         # all layers

@@ -41,18 +41,17 @@ mAR (mean Average Recall)
 <!-- graph LR -->
 <!--  -->
 ```mermaid
-graph TD
+graph LR
 title[<u>CollectingADataset</u>]
 3DScene --- Blender
 Blender --- ManualLabeling
 3DScene --- UnrealEngine
 UnrealEngine --- ManualLabeling
 UnrealEngine --- AutomaticLabeling
-AutomaticLabeling --- Dataset
-ManualLabeling ---Dataset
 RealImages --- ManualLabeling
-ManualLabeling --- Dataset
+AnyImage --- ML_Labeling
 ```  
+
 ___
 
 ```mermaid
@@ -69,9 +68,9 @@ ___
 graph TD
 title[<u>Detection</u>]
 Dataset --- RowImages
-Dataset --- TrueBoundingBoxes,LabesOfClasses,DifficultiesOfDetection
+Dataset --- TrueBoundingBoxes,LabesOfClasses
 RowImages --- TrainDetectionModel
- TrueBoundingBoxes,LabesOfClasses,DifficultiesOfDetection --- TrainDetectionModel
+ TrueBoundingBoxes,LabesOfClasses --- TrainDetectionModel
 ```
 
 
@@ -84,17 +83,3 @@ RowImages --- TrainDetectionModel
 
 # list of articles  
 1. [scalable object detection using deep neural networks (2013)](https://arxiv.org/pdf/1312.2249.pdf)
-
-
-<script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-</script>
-
-<style>
-    .customtable {
-        width:100%;
-    }
-    table {
-    width: 100%;
-    }
-</style>

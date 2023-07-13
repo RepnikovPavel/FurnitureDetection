@@ -33,7 +33,7 @@ if __name__ == '__main__':
     pr_resnet_ = models_manager.load_model(description_of_the_model=pretrained_model,
                                       reload_from_internet=False)
 
-    model = models.PolicyFuncmaker.create_sequential(resnet_=pr_resnet_)
+    model = models.ModelBuilder.create_sequential(resnet_=pr_resnet_)
 
     embeddings = []
 

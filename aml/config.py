@@ -1,5 +1,7 @@
 import os
-problem_folder = '/home/user/ds_project_data/'
+from conf import data_folder
+
+problem_forler = data_folder
 base_row_data_path = os.path.join(problem_folder, 'row_images')
 base_algs_path = os.path.join(problem_folder, 'models')
 models_for_img_base_path = os.path.join(base_algs_path, 'models_for_imgs')

@@ -17,6 +17,7 @@ class ModelsManager:
 
     def __load_model_from_int(self, repo, model_name, weights):
         # model = torch.hub.load("pytorch/vision", "resnet18", pretrained=True)
+        # 
         model = torch.hub.load(repo, model_name, weights=weights)
         return model
 
