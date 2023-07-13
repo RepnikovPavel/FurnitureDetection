@@ -1,8 +1,8 @@
 import torchvision
 from torchvision import transforms
 from PIL import Image
-
-
+import numpy as np
+from pprint import pprint as Print
 
 class ImageHandler:
     img_to_resnet_preprocess = transforms.Compose([
@@ -26,3 +26,17 @@ class ImageHandler:
 
     def RGBToResNet(self, img):
         return self.img_to_resnet_preprocess(img)
+
+def InsertBoxesToNpArray(img:np.array, boxes: np.array) -> np.array:
+    # Box [x,y,w,h] x is top left, y is top left. left-handed coordinate system
+    Boxes = np.array(np.floor(boxes),dtype=np.intc)
+    # Img [3,w,h]
+    Img = np.array(img)
+    for box in Boxes:
+        x,y,w,h = box
+        for i in range(3):
+            Img[i,x:x+w,y] = 0
+            Img[i,x:x+w,y+h] =0
+            Img[i,x,y:y+h] =0
+            Img[i,x+w,y:y+h] =0
+    return Img

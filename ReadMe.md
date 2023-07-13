@@ -49,7 +49,7 @@ Blender --- ManualLabeling
 UnrealEngine --- ManualLabeling
 UnrealEngine --- AutomaticLabeling
 RealImages --- ManualLabeling
-AnyImage --- ML_Labeling
+AnyImage --- LabelingByML
 ```  
 
 ___
@@ -73,11 +73,26 @@ RowImages --- TrainDetectionModel
  TrueBoundingBoxes,LabesOfClasses --- TrainDetectionModel
 ```
 
+___
+
+# The way to solve the test problem
+
+```mermaid
+graph TD
+
+COCO2017 --> TestAFewModels
+COCO2017 --> MakeCOCOFormatPipiline
+DataInTheCOCOFormat --> COCOFormatPipeline
+COCOFormatPipeline --> Model
+TestAFewModels -->Model
+TrainPipeline --> Model
+RealImages --> UnbiasedTesting
+```
 
 # list of tutorials
 1. [the best introductory lecture](https://www.youtube.com/watch?v=r2KA99ThEH4&list=PL5FkQ0AF9O_o2Eb5Qn8pwCDg7TniyV1Wb&index=7)
 2. [object detection tutorial on github](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Object-Detection/blob/master/README.md)
-  
+3. [COCO dataset overview](https://www.youtube.com/watch?v=h6s61a_pqfM)  
 
 
 

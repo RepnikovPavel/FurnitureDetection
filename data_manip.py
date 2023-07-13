@@ -190,3 +190,4 @@ def get_detection_annotations():
 # if __name__ == '__main__':
     # make_sql_tables_from_COCO_annotation()
     # get_detection_annotations()
+    # print(1)
