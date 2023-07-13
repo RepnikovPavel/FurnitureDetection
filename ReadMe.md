@@ -55,22 +55,24 @@ AnyImage --- LabelingByML
 ___
 
 ```mermaid
-graph TD
+graph LR
 title[<u>Segmentation</u>]
 Dataset --- RowImages
 Dataset --- TrueSegmentationMasks
+TrainPipeline --- TrainSegmentationModel
 RowImages --- TrainSegmentationModel
 TrueSegmentationMasks --- TrainSegmentationModel
 ```
 ___
 
 ```mermaid
-graph TD
+graph LR
 title[<u>Detection</u>]
 Dataset --- RowImages
 Dataset --- TrueBoundingBoxes,LabesOfClasses
 RowImages --- TrainDetectionModel
- TrueBoundingBoxes,LabesOfClasses --- TrainDetectionModel
+TrainPipeline --- TrainDetectionModel
+TrueBoundingBoxes,LabesOfClasses --- TrainDetectionModel
 ```
 
 ___
@@ -80,13 +82,14 @@ ___
 ```mermaid
 graph TD
 
-COCO2017 --> TestAFewModels
 COCO2017 --> MakeCOCOFormatPipiline
-DataInTheCOCOFormat --> COCOFormatPipeline
-COCOFormatPipeline --> Model
-TestAFewModels -->Model
-TrainPipeline --> Model
-RealImages --> UnbiasedTesting
+MakeCOCOFormatPipiline --> COCOFormatPipeline 
+COCOFormatPipeline --> TestAFewModels
+TrainPipeline --> TestAFewModels -->Model
+TrainPipeline --> TargetModel
+TargetDataset --> TargetModel
+RealImages --> AssessmentOfTheAbilityToGeneralize
+TargetModel --> AssessmentOfTheAbilityToGeneralize
 ```
 
 # list of tutorials
