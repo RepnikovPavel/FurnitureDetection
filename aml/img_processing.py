@@ -4,7 +4,8 @@ from PIL import Image
 import numpy as np
 from pprint import pprint as Print
 import torch
-
+import matplotlib.pyplot as plt
+from matplotlib import colors
 class ImageHandler:
     img_to_resnet_preprocess = transforms.Compose([
             transforms.Resize(256),
@@ -29,7 +30,7 @@ def PILToRGB(img):
     #     return img
 
 
-def InsertBoxesToNpArray(img:np.array, boxes: np.array) -> np.array:
+def InsertBoxesToNpArrayXYWH(img:np.array, boxes: np.array) -> np.array:
     # Box [x,y,w,h] x is top left, y is top left. left-handed coordinate system
     Boxes = np.array(np.floor(boxes),dtype=np.intc)
     # Img [3,w,h]
@@ -41,6 +42,35 @@ def InsertBoxesToNpArray(img:np.array, boxes: np.array) -> np.array:
             Img[i,x:x+w,y+h] =0
             Img[i,x,y:y+h] =0
             Img[i,x+w,y:y+h] =0
+    return Img
+
+def InsertBoxesToNpArrayXYXY(img:np.array, boxes: np.array) -> np.array:
+    # Box [x_tl,y_tl,x_dr,y_dr] x is top left, y is top left. left-handed coordinate system
+    Boxes = np.array(np.floor(boxes),dtype=np.intc)
+    # Img [3,w,h]
+    Img = np.array(img)
+    shape = Img.shape
+    w= shape[1]
+    h= shape[2]
+    vals = np.linspace(0,1,len(boxes))
+    np.random.shuffle(vals)
+    cmap = plt.cm.colors.ListedColormap(plt.cm.jet(vals))
+    i_ = 0
+    for box in Boxes:
+        # xtl,ytl,xdr,ydr = box
+        ytl,xtl,ydr,xdr = box
+        xtl = np.maximum(xtl,0)
+        xdr = np.minimum(xdr,w-1)
+        ytl = np.minimum(0,ytl)
+        ydr = np.minimum(ydr,h-1)
+        color = np.array(np.floor(np.array(colors.to_rgb(cmap(i_)),dtype=np.float32)*255.0),dtype=np.uint8)
+        for i in range(3):
+            channel_color = color[i]
+            Img[i,xtl:xdr,ytl] = channel_color
+            Img[i,xtl:xdr,ydr] = channel_color
+            Img[i,xtl,ytl:ydr] = channel_color
+            Img[i,xdr,ytl:ydr] = channel_color
+        i_ +=1 
     return Img
 
 def NPtoTensorGradFalse(arr:np.array):
