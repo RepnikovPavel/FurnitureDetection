@@ -44,21 +44,24 @@ BoxLabelByImgURL = torch.load(conf.BoxesLabelsByPath_filename)
 # plt.imshow(np.transpose(InsertBoxesToNpArray(Img_,BoxLabel['bboxes'])))
 # plt.show()
 
-
+device = 'cuda'
 imgs = []
 targets = []
 fps = []
+i_ =0
 for fp_ in BoxLabelByImgURL.keys():
     BoxLabel= BoxLabelByImgURL[fp_]
     fps.append(fp_)
     # Print(BoxLabel)
     npimage= np.transpose(np.array(PILToRGB(Image.open(fp_)),dtype=np.float32))
-    imgs.append(Norm(NPtoTensorGradFalse(npimage)))
+    imgs.append(Norm(NPtoTensorGradFalse(npimage)).to(device))
     targets.append({
-        'boxes':NPtoTensorGradFalse(xywh_to_xyxy(np.array(BoxLabel['bboxes']))),
-        'labels':NPtoTensorGradFalse(np.array(BoxLabel['labels']))
+        'boxes':NPtoTensorGradFalse(xywh_to_xyxy(np.array(BoxLabel['bboxes']))).to(device),
+        'labels':NPtoTensorGradFalse(np.array(BoxLabel['labels'])).to(device)
     })
-    break
+    i_+=1
+    if i_ >=10:
+        break
 
 
 models_manager = managers.ModelsManager()
@@ -66,15 +69,27 @@ model = torchvision.models.detection.fasterrcnn_resnet50_fpn(weights=FasterRCNN_
 num_classes = 81 # 80 classes + background
 in_features = model.roi_heads.box_predictor.cls_score.in_features
 model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
+model.to(device)
 model.eval()
+with torch.no_grad():
+    print('before')
+    out = [model([imgs[i]],[targets[i]])[0] for i in range(len(imgs))]
+    print(out)
+    # Print(torch.hub.list('pytorch/vision:v0.13.1'))
+    # Print(out)
 
-out = model(imgs,targets)
+    npimages = []
+    for i in range(len(out)):
+        predicted_boxes = out[i]['boxes'].cpu().detach().numpy()
+        img = np.array(PILToRGB(Image.open(fps[i])))
+        npimage = np.transpose(img)
+        for j in range(len(predicted_boxes)):
+            npimage = InsertBoxesToNpArrayXYXY(npimage,boxes = predicted_boxes)
+        
+        npimages.append(np.transpose(npimage))
+    plot_many_images(npimages,5,2,OutDir='./Print/PredictedImages')
 
-# Print(torch.hub.list('pytorch/vision:v0.13.1'))
-# Print(out)
-predicted_boxes = out[0]['boxes'].cpu().detach().numpy()
-# Print(predicted_boxes)
-npimage =np.transpose(np.array(PILToRGB(Image.open(fps[0]))))
-npimage = InsertBoxesToNpArrayXYXY(npimage,boxes = predicted_boxes)
-plt.imshow(np.transpose(npimage))
-plt.show()
+    # Print(predicted_boxes)
+    # npimage = InsertBoxesToNpArrayXYXY(npimage,boxes = predicted_boxes)
+    # plt.imshow(np.transpose(npimage))
+    # plt.show()
