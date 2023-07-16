@@ -36,6 +36,9 @@ import data_manip as dm
 from pprint import pprint as Print
 from PIL import Image
 import warnings
+from torchvision.utils import draw_bounding_boxes  
+from torchvision.io.image import read_image
+from torchvision.transforms.functional import to_pil_image
 warnings.filterwarnings("ignore", category=DeprecationWarning) 
 
 BoxLabelByImgURL = torch.load(conf.BoxesLabelsByPath_filename)
@@ -55,6 +58,7 @@ device = 'cuda'
 #                                                        num_classes=3)
 
 model = torch.load(conf.ssd300_vgg16_save_path)
+model.score_tresh = 0.5
 model.to(device)
 model.eval()
 
@@ -74,6 +78,8 @@ imgbyURL = {URL:URL_of_image_to_model_input(URL) for URL in BoxLabelByImgURL.key
 np.random.shuffle(DatasetIterator)
 BathcesOfPairs = GetPairsSplittedIntoBathces(DatasetIterator)
 
+labels_encoder = torch.load(conf.imgs_labels_encoder_filename)
+
 for b_i,batch in zip(range(len(BathcesOfPairs)),BathcesOfPairs):
     # GET batch
     # tagret: List[Dict['boxes','labels']]
@@ -81,12 +87,38 @@ for b_i,batch in zip(range(len(BathcesOfPairs)),BathcesOfPairs):
     imgs = [imgbyURL[el[0]].to(device) for el in batch]
     targets = [TargetDict_to_model_input(el[1]) for el in batch]
     
-    # GET loss on batch
+    # GET boxes,lables,scores on batch
     BatchAns = model(imgs)
+    # imgs_ = [to_pil_image(draw_bounding_boxes(
+    #             image=read_image(el[0]),
+    #             boxes=[BatchAns[i]['boxes'][0]],
+    #             labels=[BatchAns[i]['labels'][0]],
+    #             colors="red",
+    #             width = 4,
+    #             font_size = 80
+    #             ).cpu().detach()) 
+    #             for i,el in zip(range(len(batch)),batch)]
 
-    imgs_ = [InsertBoxesToNpArrayXYXY(cv2.imread(el[0],cv2.IMREAD_COLOR),
-                boxes=BatchAns[i]['boxes'].cpu().detach().numpy()) 
-                for i,el in zip(range(len(batch)),batch)]
+    imgs_= []
+    for i,el in zip(range(len(batch)),batch):
+        fp_ = el[0]
+        img = read_image(el[0])
+        boxes = torch.unsqueeze(BatchAns[i]['boxes'][0],dim=0)
+        labels=  [str(l_) for l_ in labels_encoder.inverse_transform([BatchAns[i]['labels'][0].cpu().detach().numpy()])]
+        imgwithboxes = draw_bounding_boxes(
+                image=read_image(el[0]),
+                boxes=boxes,
+                labels=labels,
+                colors="red",
+                width = 4,
+                font_size = 80
+                )
+        pil_ = to_pil_image(imgwithboxes)
+        imgs_.append(pil_)
+    
+    # imgs_ = [InsertBoxesToNpArrayXYXY(cv2.imread(el[0],cv2.IMREAD_COLOR),
+    #             boxes=BatchAns[i]['boxes'].cpu().detach().numpy()[0]) 
+    #             for i,el in zip(range(len(batch)),batch)]
     plot_many_images(imgs_,OutDir='./Print/PredictedImages')
     raise SystemExit
     boxes

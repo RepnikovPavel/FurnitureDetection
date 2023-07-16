@@ -58,15 +58,15 @@ def InsertBoxesToNpArrayXYXY(img:np.array, boxes: np.array) -> np.array:
     np.random.shuffle(vals)
     cmap = plt.cm.colors.ListedColormap(plt.cm.jet(vals))
     i_ = 0
-    for box in Boxes:
-        xtl,ytl,xdr,ydr = box
+    if len(Boxes.shape)==1:
+        xtl,ytl,xdr,ydr = Boxes
         # ytl,xtl,ydr,xdr = box
         if ((xtl<0 or xtl>=w) or
             (xdr<0 or xdr>=w) or
             (ytl<0 or ytl>=h) or
             (ydr<0 or ydr>=h)):
             print('box is outside the permitted area')
-            continue 
+            return Img 
         xtl = np.maximum(xtl,0)
         xdr = np.minimum(xdr,w-1)
         ytl = np.minimum(0,ytl)
@@ -79,6 +79,28 @@ def InsertBoxesToNpArrayXYXY(img:np.array, boxes: np.array) -> np.array:
             Img[ytl:ydr,xtl,i] = channel_color
             Img[ytl:ydr,xdr,i] = channel_color
         i_ +=1 
+    else:
+        for box in Boxes:
+            xtl,ytl,xdr,ydr = box
+            # ytl,xtl,ydr,xdr = box
+            if ((xtl<0 or xtl>=w) or
+                (xdr<0 or xdr>=w) or
+                (ytl<0 or ytl>=h) or
+                (ydr<0 or ydr>=h)):
+                print('box is outside the permitted area')
+                continue 
+            xtl = np.maximum(xtl,0)
+            xdr = np.minimum(xdr,w-1)
+            ytl = np.minimum(0,ytl)
+            ydr = np.minimum(ydr,h-1)
+            color = np.array(np.floor(np.array(colors.to_rgb(cmap(i_)),dtype=np.float32)*255.0),dtype=np.uint8)
+            for i in range(3):
+                channel_color = color[i]
+                Img[ytl,xtl:xdr,i] = channel_color
+                Img[ydr,xtl:xdr,i] = channel_color
+                Img[ytl:ydr,xtl,i] = channel_color
+                Img[ytl:ydr,xdr,i] = channel_color
+            i_ +=1 
     return Img
 
 def NPtoTensorGradFalse(arr:np.array):
@@ -191,8 +213,8 @@ def plot_many_images(imgs:np.array,OutDir:str)->None:
                 <li>
                     <img src="{}.png" alt="pink background" />
                 </li>'''.format(i)
-        # im.save(os.path.join(OutDir,'{}.png'.format(i)))
-        cv2.imwrite(os.path.join(OutDir,'{}.png'.format(i)),imgs[i])
+        imgs[i].save(os.path.join(OutDir,'{}.png'.format(i)))
+        # cv2.imwrite(os.path.join(OutDir,'{}.png'.format(i)),imgs[i])
     with open(os.path.join(OutDir,'index.html'),'w') as f:
         f.write(img0_html+im2+img1_html)
     os.system('google-chrome {}'.format(os.path.join(OutDir,'index.html')))
