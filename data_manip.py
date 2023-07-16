@@ -165,9 +165,16 @@ def get_detection_annotations():
         from images 
         join annotations 
         on images.id = annotations.image_id and 
-        annotations.category_id >= 4 and
-        annotations.category_id <= 10
+        (annotations.category_id = 89 or
+        annotations.category_id = 80)
         ;
+    '''
+    q_distribution_of_classes = '''
+        select annotations.category_id as cid, categories.name as cname, count(categories.name) as namecount
+        from annotations join categories on
+        cid = categories.id
+        group by cname
+        order by namecount;
     '''
     connection = sqlite3.connect(dconf.sqlannotationsdb)
     cursor = connection.cursor()

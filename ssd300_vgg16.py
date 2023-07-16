@@ -49,7 +49,7 @@ num_anchors = model.anchor_generator.num_anchors_per_location()
 channels_to_classification_head = det_utils.retrieve_out_channels(model.backbone,size=(300,300))
 model.head.classification_head = SSDClassificationHead(in_channels=channels_to_classification_head,
                                                        num_anchors=num_anchors,
-                                                       num_classes=8)
+                                                       num_classes=3)
 
 
 model.to(device)
