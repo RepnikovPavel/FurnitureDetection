@@ -49,11 +49,11 @@ def InsertBoxesToNpArrayXYWH(img:np.array, boxes: np.array) -> np.array:
 def InsertBoxesToNpArrayXYXY(img:np.array, boxes: np.array) -> np.array:
     # Box [x_tl,y_tl,x_dr,y_dr] x is top left, y is top left. left-handed coordinate system
     Boxes = np.array(np.floor(boxes),dtype=np.intc)
-    # Img [3,w,h]
+    # Img [h,w,c]
     Img = np.array(img)
     shape = Img.shape
+    h= shape[0]
     w= shape[1]
-    h= shape[2]
     vals = np.linspace(0,1,len(boxes))
     np.random.shuffle(vals)
     cmap = plt.cm.colors.ListedColormap(plt.cm.jet(vals))
@@ -65,6 +65,7 @@ def InsertBoxesToNpArrayXYXY(img:np.array, boxes: np.array) -> np.array:
             (xdr<0 or xdr>=w) or
             (ytl<0 or ytl>=h) or
             (ydr<0 or ydr>=h)):
+            print('box is outside the permitted area')
             continue 
         xtl = np.maximum(xtl,0)
         xdr = np.minimum(xdr,w-1)
@@ -73,10 +74,10 @@ def InsertBoxesToNpArrayXYXY(img:np.array, boxes: np.array) -> np.array:
         color = np.array(np.floor(np.array(colors.to_rgb(cmap(i_)),dtype=np.float32)*255.0),dtype=np.uint8)
         for i in range(3):
             channel_color = color[i]
-            Img[i,xtl:xdr,ytl] = channel_color
-            Img[i,xtl:xdr,ydr] = channel_color
-            Img[i,xtl,ytl:ydr] = channel_color
-            Img[i,xdr,ytl:ydr] = channel_color
+            Img[ytl,xtl:xdr,i] = channel_color
+            Img[ydr,xtl:xdr,i] = channel_color
+            Img[ytl:ydr,xtl,i] = channel_color
+            Img[ytl:ydr,xdr,i] = channel_color
         i_ +=1 
     return Img
 
@@ -180,14 +181,18 @@ def plot_many_images(imgs:np.array,OutDir:str)->None:
             except Exception as e:
                 print('Failed to delete %s. Reason: %s' % (el, e))
     im2 = ''
+    # toimg = transforms.ToPILImage()
     for i in range(len(imgs)):
-        npim = imgs[i]
-        im = Image.fromarray(npim)
+        # npim = imgs[i].astype(np.uint8)
+        # img = cv2.merge((npim[1],npim[0],npim[2]))
+        # im = toimg(npim)
+        # im = Image.fromarray(npim,'RGB')
         im2+='''
                 <li>
                     <img src="{}.png" alt="pink background" />
                 </li>'''.format(i)
-        im.save(os.path.join(OutDir,'{}.png'.format(i)))
+        # im.save(os.path.join(OutDir,'{}.png'.format(i)))
+        cv2.imwrite(os.path.join(OutDir,'{}.png'.format(i)),imgs[i])
     with open(os.path.join(OutDir,'index.html'),'w') as f:
         f.write(img0_html+im2+img1_html)
     os.system('google-chrome {}'.format(os.path.join(OutDir,'index.html')))
