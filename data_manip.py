@@ -4,6 +4,9 @@ import sqlite3
 import os
 import torch
 import aml.time_mesuarment as tm
+from pprint import pprint as Print
+import numpy as np
+from sklearn.preprocessing import LabelEncoder
 
 
 def make_sql_tables_from_COCO_annotation():
@@ -161,33 +164,49 @@ def get_detection_annotations():
         annotations.x,annotations.y,annotations.w,annotations.h 
         from images 
         join annotations 
-        on images.id = annotations.image_id;
+        on images.id = annotations.image_id and 
+        annotations.category_id >= 4 and
+        annotations.category_id <= 10
+        ;
     '''
     connection = sqlite3.connect(dconf.sqlannotationsdb)
     cursor = connection.cursor()
     cursor.execute(q0)
     response = cursor.fetchall()
 
-    q1 = '''
-        select images.filename from images;
-    '''
-    cursor.execute(q1)
-    filepaths = [el[0] for el in cursor.fetchall()]
+    # q1 = '''
+    #     select count(images.filename) from images
+    #     join annotations
+    #     on images.id = annotations.image_id and annotations.category_id <=3
+    #     ;
+    # '''
+    filepaths = np.unique([el[0] for el in response])
+    lables = np.unique([el[1]for el in response])
     #   DetectionDataNav[ImageFullPath]
     #       bboxes list
     #       lalels list
-    BoxLabelByImgPath = {os.path.join(dconf.all_images_folder,fp):{'bboxes':[],'labels':[]} for fp in filepaths}
+    BoxLabelByImgPath = {os.path.join(dconf.all_images_folder,fp):{'boxes':[],'labels':[]} for fp in filepaths}
+    le = LabelEncoder()
+    le.fit(lables)
+
+
     for r in response:
         fp = os.path.join(dconf.all_images_folder,r[0])
         label = r[1]
         bbox = r[2:6]
-        BoxLabelByImgPath[fp]['bboxes'].append(bbox)
-        BoxLabelByImgPath[fp]['labels'].append(label)
+        BoxLabelByImgPath[fp]['boxes'].append(bbox)
+        BoxLabelByImgPath[fp]['labels'].append(le.transform([label])[0])
+    Print({
+        'size of dataset': len(BoxLabelByImgPath),
+        'number of classes without background': len(lables),
+    })
     torch.save(BoxLabelByImgPath, dconf.BoxesLabelsByPath_filename)
+    torch.save(le, dconf.imgs_labels_encoder_filename)
+
     cursor.close()
     connection.close()
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
     # make_sql_tables_from_COCO_annotation()
-    # get_detection_annotations()
+    get_detection_annotations()
     # print(1)

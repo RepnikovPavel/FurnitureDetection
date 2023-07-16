@@ -6,6 +6,7 @@ sqlannotationsdb = os.path.join(data_folder,r'annotations.db')
 
 all_images_folder = os.path.join(data_folder,'train2017')
 BoxesLabelsByPath_filename = os.path.join(data_folder,'BoxesLablesByPath.txt') 
+imgs_labels_encoder_filename = os.path.join(data_folder,'imgs_labels_encoder_filename.txt')
 
 base_row_data_path = os.path.join(data_folder, 'row_images')
 base_algs_path = os.path.join(data_folder, 'models')

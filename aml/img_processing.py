@@ -7,6 +7,7 @@ import torch
 import matplotlib.pyplot as plt
 from matplotlib import colors
 import os,shutil
+import cv2
 class ImageHandler:
     img_to_resnet_preprocess = transforms.Compose([
             transforms.Resize(256),
@@ -58,8 +59,13 @@ def InsertBoxesToNpArrayXYXY(img:np.array, boxes: np.array) -> np.array:
     cmap = plt.cm.colors.ListedColormap(plt.cm.jet(vals))
     i_ = 0
     for box in Boxes:
-        # xtl,ytl,xdr,ydr = box
-        ytl,xtl,ydr,xdr = box
+        xtl,ytl,xdr,ydr = box
+        # ytl,xtl,ydr,xdr = box
+        if ((xtl<0 or xtl>=w) or
+            (xdr<0 or xdr>=w) or
+            (ytl<0 or ytl>=h) or
+            (ydr<0 or ydr>=h)):
+            continue 
         xtl = np.maximum(xtl,0)
         xdr = np.minimum(xdr,w-1)
         ytl = np.minimum(0,ytl)
@@ -97,6 +103,25 @@ def xywh_to_xyxy(xywh:np.array):
             xyxy[i][2] = xywh[i][0] + xywh[i][2]
             xyxy[i][3] = xywh[i][1] + xywh[i][3]
     return xyxy
+
+
+img_to_resnet_preprocess = transforms.Compose([
+        transforms.Resize(256),
+        transforms.CenterCrop(224),
+        transforms.ToTensor(), # convert PIL imgs values from range 0 255 to range 0 1
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ])
+
+def IMGtoSSD300_VGG16(img:np.array, device:str)->torch.tensor:
+    (h,w,c)= img.shape
+    # cv2.imshow('image',img)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+    img_= transforms.ToTensor()(img)
+    # (h,w)
+    img_= transforms.Resize((np.maximum(300, h),np.maximum(300, w)))(img_)
+    img_ = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])(img_)    
+    return img_.requires_grad_(False).to(device)
 
 
 img0_html = '''

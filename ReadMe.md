@@ -96,8 +96,8 @@ TargetModel --> AssessmentOfTheAbilityToGeneralize
 1. [the best introductory lecture](https://www.youtube.com/watch?v=r2KA99ThEH4&list=PL5FkQ0AF9O_o2Eb5Qn8pwCDg7TniyV1Wb&index=7)
 2. [object detection tutorial on github](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Object-Detection/blob/master/README.md)
 3. [COCO dataset overview](https://www.youtube.com/watch?v=h6s61a_pqfM)  
-
-
+4. [MIPT Computer Vision](https://www.youtube.com/watch?v=-lIVq52AAPc&list=PL4_hYwCyhAvZeq93ssEUaR47xhvs7IhJM&index=12)  
+5. [ssd300 article](https://arxiv.org/pdf/1512.02325.pdf)
 
 # list of articles  
 1. [scalable object detection using deep neural networks (2013)](https://arxiv.org/pdf/1312.2249.pdf)

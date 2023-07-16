@@ -73,7 +73,8 @@ model.to(device)
 model.eval()
 with torch.no_grad():
     print('before')
-    out = [model([imgs[i]],[targets[i]])[0] for i in range(len(imgs))]
+    # out = [model([imgs[i]],[targets[i]])[0] for i in range(len(imgs))]
+    out = [model([imgs[i]])[0] for i in range(len(imgs))]
     print(out)
     # Print(torch.hub.list('pytorch/vision:v0.13.1'))
     # Print(out)
@@ -87,7 +88,7 @@ with torch.no_grad():
             npimage = InsertBoxesToNpArrayXYXY(npimage,boxes = predicted_boxes)
         
         npimages.append(np.transpose(npimage))
-    plot_many_images(npimages,5,2,OutDir='./Print/PredictedImages')
+    plot_many_images(npimages,OutDir='./Print/PredictedImages')
 
     # Print(predicted_boxes)
     # npimage = InsertBoxesToNpArrayXYXY(npimage,boxes = predicted_boxes)
