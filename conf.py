@@ -8,6 +8,8 @@ all_images_folder = os.path.join(data_folder,'train2017')
 BoxesLabelsByPath_filename = os.path.join(data_folder,'BoxesLablesByPath.txt') 
 imgs_labels_encoder_filename = os.path.join(data_folder,'imgs_labels_encoder_filename.txt')
 
+ssd300_vgg16_save_path = os.path.join(data_folder,'ssd300_vgg16.txt')
+
 base_row_data_path = os.path.join(data_folder, 'row_images')
 base_algs_path = os.path.join(data_folder, 'models')
 models_for_img_base_path = os.path.join(base_algs_path, 'models_for_imgs')
