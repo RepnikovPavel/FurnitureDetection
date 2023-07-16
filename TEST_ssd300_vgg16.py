@@ -89,22 +89,21 @@ for b_i,batch in zip(range(len(BathcesOfPairs)),BathcesOfPairs):
     
     # GET boxes,lables,scores on batch
     BatchAns = model(imgs)
-    # imgs_ = [to_pil_image(draw_bounding_boxes(
-    #             image=read_image(el[0]),
-    #             boxes=[BatchAns[i]['boxes'][0]],
-    #             labels=[BatchAns[i]['labels'][0]],
-    #             colors="red",
-    #             width = 4,
-    #             font_size = 80
-    #             ).cpu().detach()) 
-    #             for i,el in zip(range(len(batch)),batch)]
+
+
 
     imgs_= []
     for i,el in zip(range(len(batch)),batch):
         fp_ = el[0]
         img = read_image(el[0])
-        boxes = torch.unsqueeze(BatchAns[i]['boxes'][0],dim=0)
-        labels=  [str(l_) for l_ in labels_encoder.inverse_transform([BatchAns[i]['labels'][0].cpu().detach().numpy()])]
+
+        boxes = BatchAns[i]['boxes'][:5]
+        ls =np.squeeze(BatchAns[i]['labels'].cpu().detach().numpy()[:5])
+        print(ls)
+        labels=  [str(l_) for l_ in labels_encoder.inverse_transform(ls)]
+
+        # boxes = torch.unsqueeze(BatchAns[i]['boxes'][0],dim=0)
+        # labels=  [str(l_) for l_ in labels_encoder.inverse_transform([BatchAns[i]['labels'][0].cpu().detach().numpy()])]
         imgwithboxes = draw_bounding_boxes(
                 image=read_image(el[0]),
                 boxes=boxes,
