@@ -112,7 +112,7 @@ img_to_resnet_preprocess = transforms.Compose([
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
 
-def IMGtoSSD300_VGG16(img:np.array, device:str)->torch.tensor:
+def IMGtoSSD300_VGG16(img:np.array)->torch.tensor:
     (h,w,c)= img.shape
     # cv2.imshow('image',img)
     # cv2.waitKey(0)
@@ -121,7 +121,7 @@ def IMGtoSSD300_VGG16(img:np.array, device:str)->torch.tensor:
     # (h,w)
     img_= transforms.Resize((np.maximum(300, h),np.maximum(300, w)))(img_)
     img_ = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])(img_)    
-    return img_.requires_grad_(False).to(device)
+    return img_.requires_grad_(False)
 
 
 img0_html = '''
