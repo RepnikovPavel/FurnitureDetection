@@ -77,7 +77,7 @@ TrueBoundingBoxes,LabesOfClasses --- TrainDetectionModel
 
 ___
 
-# The way to solve the test problem
+# the scheme of solving the problem
 
 ```mermaid
 graph TD
@@ -90,7 +90,28 @@ TrainPipeline --> TargetModel
 TargetDataset --> TargetModel
 RealImages --> AssessmentOfTheAbilityToGeneralize
 TargetModel --> AssessmentOfTheAbilityToGeneralize
+```  
+
+
+# the scheme of solving the problem with transfer learning  
+
+```mermaid
+graph LR
+
+FurnitureImagesDataset --> ModelСlassifyingFurniture
+ModelСlassifyingFurniture --> ClassificationHeadForDetectionModel --> TheSchemeOfSolvingTheProblem
+
+```  
+___ 
+
+# solving the problem with automatic labeling  
+
+```mermaid
+graph LR  
+UnrealEngineOrUnity --> Real-TimeSubstitutionOfObjectTextures --> SegmentationMasks --> Dataset --> TrainSegmentationModel
 ```
+
+
 
 # list of tutorials
 1. [the best introductory lecture](https://www.youtube.com/watch?v=r2KA99ThEH4&list=PL5FkQ0AF9O_o2Eb5Qn8pwCDg7TniyV1Wb&index=7)

@@ -1,3 +1,10 @@
 import os
-train_dataset_url = r'http://images.cocodataset.org/zips/train2017.zip'
-all_labels_url = r'http://images.cocodataset.org/annotations/annotations_trainval2017.zip'
+datasets = {
+    'COCO2017':{
+        'data': r'http://images.cocodataset.org/zips/train2017.zip',
+        'labels': r'http://images.cocodataset.org/annotations/annotations_trainval2017.zip'
+        },
+    'FurnitureImagesDataset':{
+        'all':r'https://www.kaggle.com/datasets/lasaljaywardena/furniture-images-dataset/download?datasetVersionNumber=3'
+    }
+}
