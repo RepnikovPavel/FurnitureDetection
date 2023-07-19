@@ -96,7 +96,7 @@ TargetModel --> AssessmentOfTheAbilityToGeneralize
 # the scheme of solving the problem with transfer learning  
 
 ```mermaid
-graph LR
+graph TD
 
 FurnitureImagesDataset --> ModelСlassifyingFurniture
 ModelСlassifyingFurniture --> ClassificationHeadForDetectionModel --> TheSchemeOfSolvingTheProblem
@@ -107,19 +107,19 @@ ___
 # solving the problem with automatic labeling  
 
 ```mermaid
-graph LR  
+graph TD 
 UnrealEngineOrUnity --> Real-TimeSubstitutionOfObjectTextures --> SegmentationMasks --> Dataset --> TrainSegmentationModel
 ```
 
 ```mermaid
-graph LR
+graph TD
 UnrealEngineOrUnity --> Get3dBoundingBoxed --> ProjectToTheCamera --> BBoxesOnImage --> TrainDetectionModel
 ```
 
 
 # automatic detection of overlapping objects
 
-![Alt text](image.png)
+![Alt text](https://drive.google.com/file/d/1vmhwPISZPl_SMDmELJStf2ZdctjGB_0I/view?usp=sharing)
 ![Alt text](image-1.png)
 
 
