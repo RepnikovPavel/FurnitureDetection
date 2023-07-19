@@ -11,41 +11,86 @@ public class BBOX : MonoBehaviour
     Collider collider;
     Renderer renderer;
 
-    Rect CurrentRect;
-    bool DoINeedToDrawRect;
+    Rect CurrentRect = new Rect();
+    public bool DoINeedToDrawRect;
+
+    public float CurrentZ;
+
+    public string category;
+    public int object_id;
+
     void Start()
     {
         camera = Camera.main;
         meshrenderer = GetComponent<MeshRenderer>();
         collider = GetComponent<Collider>();
         renderer = GetComponent<Renderer>();
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        var bounds = collider.bounds;
-        cameraFrustum = GeometryUtility.CalculateFrustumPlanes(camera);
-        if (GeometryUtility.TestPlanesAABB(cameraFrustum,bounds)){
-            meshrenderer.material.color = Color.green;
-            CurrentRect = GetBBox();
-            Debug.Log(CurrentRect);
-            DoINeedToDrawRect = true;
-            // Debug.Log(CurrentRect);
-            // Debug.Log("green");
-        } else {
-            // renderer.sharedMaterial.color = Color.red;
-            meshrenderer.material.color = Color.red;
-            DoINeedToDrawRect = false;
-            // Debug.Log("red");
-        }
+        // Debug.Log(category);
+        // Debug.Log(object_id);
+        // var bounds = collider.bounds;
+        // cameraFrustum = GeometryUtility.CalculateFrustumPlanes(camera);
+        // if (GeometryUtility.TestPlanesAABB(cameraFrustum,bounds)){
+        //     // meshrenderer.material.color = Color.green;
+        //     CurrentRect = GetBBox();
+        //     // Debug.Log(CurrentRect);
+        //     DoINeedToDrawRect = true;
+        //     // Debug.Log(CurrentRect);
+        //     // Debug.Log("green");
+        // } else {
+        //     // renderer.sharedMaterial.color = Color.red;
+        //     // meshrenderer.material.color = Color.red;
+        //     DoINeedToDrawRect = false;
+        //     // Debug.Log("red");
+        // }
 
 
         // Debug.Log(rect);
         // GUIDrawRect(rect,Color.red);
 
     }
+
+    public Rect GetBoxIfInCameraView(){
+        // return width< 0.0f if not in camera view
+                // Debug.Log(category);
+        // Debug.Log(object_id);
+        // Debug.Log(camera);
+        var bounds = collider.bounds;
+        cameraFrustum = GeometryUtility.CalculateFrustumPlanes(camera);
+        // Debug.Log(cameraFrustum);
+        bool IsInCameraView = GeometryUtility.TestPlanesAABB(cameraFrustum,bounds);
+        // Debug.Log(IsInCameraView);
+        if (IsInCameraView){
+            // meshrenderer.material.color = Color.green;
+            CurrentRect = GetBBox();
+            // Debug.Log(CurrentRect);
+            // Debug.Log(CurrentRect);
+            DoINeedToDrawRect = true;
+            // Debug.Log(CurrentRect);
+            // Debug.Log("green");
+            return CurrentRect;
+        } else {
+            // renderer.sharedMaterial.color = Color.red;
+            // meshrenderer.material.color = Color.red;
+            DoINeedToDrawRect = false;
+            CurrentRect.width = -1.0f;
+            return CurrentRect;
+            // Debug.Log("red");
+        }
+
+
+        // Debug.Log(rect);
+        // GUIDrawRect(rect,Color.red);
+    }
+
+    public float GetZInCameraView(){
+        return CurrentZ;
+    }
+
 
     void OnGUI(){
         if(DoINeedToDrawRect){
@@ -54,16 +99,17 @@ public class BBOX : MonoBehaviour
     }
 
     // public static Rect GetBBox(GameObject go)
-    public Rect GetBBox()
+    private Rect GetBBox()
     {
         // 
-
+        // Debug.Log("get box call");
 
         // Vector3 cen = go.GetComponent<Renderer>().bounds.center;
         // Vector3 ext = go.GetComponent<Renderer>().bounds.extents;
         var r = GetComponent<Renderer>();
         Vector3 cen = r.bounds.center;
         Vector3 ext = r.bounds.extents;
+        // Debug.Log(r);
         // Debug.Log(cen);
         // Debug.Log(ext);
         // Vector2[] extentPoints = new Vector2[8]
@@ -85,8 +131,27 @@ public class BBOX : MonoBehaviour
         var on_screen_with_depth6 = camera.WorldToScreenPoint(new Vector3(cen.x+ext.x, cen.y+ext.y, cen.z-ext.z));
         var on_screen_with_depth7 = camera.WorldToScreenPoint(new Vector3(cen.x-ext.x, cen.y+ext.y, cen.z+ext.z));
         var on_screen_with_depth8 = camera.WorldToScreenPoint(new Vector3(cen.x+ext.x, cen.y+ext.y, cen.z+ext.z));
+        // Debug.Log(on_screen_with_depth1);
+        // for z y can get any of coords if y use box collider
+        // else y need get nearest point to camera
+        float[] zarr = new float[]{
+            on_screen_with_depth1[2],
+            on_screen_with_depth2[2],
+            on_screen_with_depth3[2],
+            on_screen_with_depth4[2],
+            on_screen_with_depth5[2],
+            on_screen_with_depth6[2],
+            on_screen_with_depth7[2],
+            on_screen_with_depth8[2]
 
-
+        };
+        // Debug.Log(zarr);
+        CurrentZ = on_screen_with_depth1[2];
+        for(var i=0;i<8;i++){
+            CurrentZ = Mathf.Min(CurrentZ,zarr[i]);
+        }
+        // string mes = CurrentZ.ToString("R");
+        // Debug.Log(mes);
 
         Vector2[] extentPoints = new Vector2[8]
         {
@@ -99,7 +164,7 @@ public class BBOX : MonoBehaviour
             new Vector2(on_screen_with_depth7[0],on_screen_with_depth7[1]),
             new Vector2(on_screen_with_depth8[0],on_screen_with_depth8[1])
         };
-
+        // Debug.Log(extentPoints[0]);
         Vector2 min = extentPoints[0];
         Vector2 max = extentPoints[0];
         foreach (Vector2 v in extentPoints)
@@ -115,8 +180,10 @@ public class BBOX : MonoBehaviour
         // Gizmos.matrix = Matrix4x4.identity;
         // Gizmos.color = Color.blue;
         // Gizmos.DrawWireCube(bounds.center, bounds.extents * 2);
-
-        return new Rect(min.x, min.y, max.x - min.x, max.y - min.y);
+        // Debug.Log(min.x);
+        var out_ = new Rect(min.x, min.y, max.x - min.x, max.y - min.y);
+        // Debug.Log(out_);
+        return out_;
     }
     private static Texture2D _staticRectTexture;
     private static GUIStyle _staticRectStyle;
@@ -142,7 +209,7 @@ public class BBOX : MonoBehaviour
         _staticRectStyle.normal.background = _staticRectTexture;
         var viewport_rect= camera.pixelRect;
         Rect tmprect = new Rect(new Vector2(position.x,viewport_rect.height- position.y - position.height),new Vector2(position.width,position.height));
-        Debug.Log(viewport_rect);
+        // Debug.Log(viewport_rect);
         // GUI.Box( tmprect, GUIContent.none, _staticRectStyle );
         // GUI.DrawTexture(,_staticRectTexture);
         var area = tmprect;

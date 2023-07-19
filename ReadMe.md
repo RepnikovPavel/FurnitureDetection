@@ -111,6 +111,13 @@ graph LR
 UnrealEngineOrUnity --> Real-TimeSubstitutionOfObjectTextures --> SegmentationMasks --> Dataset --> TrainSegmentationModel
 ```
 
+# creating a dataset  
+
+```mermaid
+graph LR 
+blenderkit --> fbx --> UnityAsset
+```
+
 
 
 # list of links
@@ -123,3 +130,4 @@ UnrealEngineOrUnity --> Real-TimeSubstitutionOfObjectTextures --> SegmentationMa
 7. [unreal engine segmentation dataset](https://www.youtube.com/watch?v=FhdKNTcm12w)
 8. [scalable object detection using deep neural networks (2013)](https://arxiv.org/pdf/1312.2249.pdf)
 9. [3d person camera in unity](https://www.youtube.com/watch?v=owW7BE2t8ME)
+10. [segmentation mask in utiny](https://www.youtube.com/watch?v=-4_ucqmAbNk)
