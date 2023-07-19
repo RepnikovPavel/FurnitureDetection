@@ -123,6 +123,11 @@ UnrealEngineOrUnity --> Get3dBoundingBoxed --> ProjectToTheCamera --> BBoxesOnIm
 ![Alt text](image-1.png)
 
 
+# changing the image registration conditions 
+![Alt text](image-5.png)
+![Alt text](image-6.png)
+
+
 
 # creating a dataset  
 

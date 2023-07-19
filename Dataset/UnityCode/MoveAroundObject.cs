@@ -39,7 +39,7 @@ public class MoveAroundObject : MonoBehaviour
     IEnumerator Start(){
         camera = Camera.main;
         spawnercomp = spawner.GetComponent("Spawner") as Spawner;
-
+        Cursor.visible = false;
         while (true){
             yield return WriteImg_();
         }
