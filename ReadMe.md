@@ -119,8 +119,10 @@ UnrealEngineOrUnity --> Get3dBoundingBoxed --> ProjectToTheCamera --> BBoxesOnIm
 
 # automatic detection of overlapping objects
 
-![Alt text](https://drive.google.com/file/d/1vmhwPISZPl_SMDmELJStf2ZdctjGB_0I/view?usp=sharing)
-![Alt text](image-1.png)
+<!-- ![Alt text](https://drive.google.com/file/d//) -->
+![Alt text](https://drive.google.com/uc?id=1vmhwPISZPl_SMDmELJStf2ZdctjGB_0I)
+<!-- https://drive.google.com/file/d/1ie8QjnRgnC2kmKwQUaZB27P-hbp1MUjq/view?usp=sharing -->
+![Alt text](https://drive.google.com/uc?id=1ie8QjnRgnC2kmKwQUaZB27P-hbp1MUjq)
 
 
 # changing the image registration conditions 
