@@ -111,6 +111,19 @@ graph LR
 UnrealEngineOrUnity --> Real-TimeSubstitutionOfObjectTextures --> SegmentationMasks --> Dataset --> TrainSegmentationModel
 ```
 
+```mermaid
+graph LR
+UnrealEngineOrUnity --> Get3dBoundingBoxed --> ProjectToTheCamera --> BBoxesOnImage --> TrainDetectionModel
+```
+
+
+# automatic detection of overlapping objects
+
+![Alt text](image.png)
+![Alt text](image-1.png)
+
+
+
 # creating a dataset  
 
 ```mermaid
