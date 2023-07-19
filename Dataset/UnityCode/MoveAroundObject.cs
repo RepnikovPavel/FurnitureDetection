@@ -93,8 +93,12 @@ public class MoveAroundObject : MonoBehaviour
                 if(objid == anotherid){
                     continue;
                 }
-                if(IsAInsideB(ObjRects[objid],ObjRects[anotherid]) && (ObjZ[objid]>ObjZ[anotherid])){
+                var isinside = IsAInsideB(ObjRects[objid],ObjRects[anotherid]);
+                // Debug.Log(isinside);
+                // Debug.Log(ObjZ[objid]);
+                if( isinside && (ObjZ[objid]>ObjZ[anotherid])){
                     IsNotInside = false;
+                    ObjsBoxes[objid].DoINeedToDrawRect = false;
                     break;
                 }
 
