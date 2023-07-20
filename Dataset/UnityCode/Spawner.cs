@@ -27,28 +27,32 @@ public class Spawner : MonoBehaviour
     public GameObject wall4;
     public GameObject wall5;
 
+    public string[] PrefabsNames;
+    public Dictionary<int,string> PrefabCategory = new Dictionary<int, string>();
+    public Dictionary<string,int> PrefabCategoryIdByName = new Dictionary<string, int>();
     
-
+    public bool IsStartEnd = false;
     // Start is called before the first frame update
     void Start()
     {   
 
 
-        string[] PrefabsNames = new string[]{
+        PrefabsNames = new string[]{
             "stool_1",
             "stool_2"
-        };
-        string[] PrefabCategory = new string[]{
-            "stool",
-            "stool"
-        };
+        }; 
+        // Debug.Log(PrefabCategory);
+        PrefabCategory.Add(0,"stool_1");
+        PrefabCategory.Add(1,"stool_2");
 
         // LOAD furniture prefabs
         for(var i=0;i<PrefabsNames.Length;i++){
             var prefab = Resources.Load(PrefabsNames[i]) as GameObject; 
             Prefabs.Add(PrefabsNames[i], prefab);
         }
-
+        for(var i= 0;i<PrefabsNames.Length;i++){
+            PrefabCategoryIdByName.Add(PrefabCategory[i],i);
+        }
 
         // GENERATE objects in scene
         int last_id_ = 0;
@@ -64,6 +68,7 @@ public class Spawner : MonoBehaviour
             var ObjInScene = Instantiate(Prefabs[prefab_name_]);
 
             var bbox = ObjInScene.GetComponent("BBOX") as BBOX;
+            // Debug.Log(bbox);
             // SET category name and object in scene id
             bbox.category = PrefabCategory[name_pos_];
             bbox.object_id = last_id_;
@@ -117,7 +122,8 @@ public class Spawner : MonoBehaviour
 
             light_id_ +=1;
         }
-
+        IsStartEnd = true;
+        // Debug.Log(IsStartEnd);
 
         // Debug.Log("Assets/objects/Cube.prefab");
         // Assets/Resources/Cube.prefab
@@ -153,14 +159,14 @@ public class Spawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("q"))
-        {
-            // Debug.Log("key pressed");
-            ChangeStateOfScene();
-        }
+        // if (Input.GetKeyDown("q"))
+        // {
+        //     // Debug.Log("key pressed");
+        //     ChangeStateOfScene();
+        // }
     }
 
-    void ChangeStateOfScene(){
+    public void ChangeStateOfScene(){
         
         var smoothness_range = new float[]{0.0f,1.0f};
         var light_range = new int[]{1,150};

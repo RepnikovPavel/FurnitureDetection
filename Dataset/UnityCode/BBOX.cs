@@ -21,10 +21,15 @@ public class BBOX : MonoBehaviour
 
     void Start()
     {
-        camera = Camera.main;
-        meshrenderer = GetComponent<MeshRenderer>();
-        collider = GetComponent<Collider>();
-        renderer = GetComponent<Renderer>();
+        // camera = Camera.main;
+        // meshrenderer = GetComponent<MeshRenderer>();
+        // Debug.Log("in bbox script start");
+        // collider = GetComponent<Collider>();
+        // // renderer = GetComponent<Renderer>();
+        // Debug.Log(collider);
+        // Debug.Log(renderer);
+        // Debug.Log("after get collider and renderer");
+        
     }
 
     // Update is called once per frame
@@ -59,7 +64,19 @@ public class BBOX : MonoBehaviour
                 // Debug.Log(category);
         // Debug.Log(object_id);
         // Debug.Log(camera);
+
+        camera = Camera.main;
+        meshrenderer = GetComponent<MeshRenderer>();
+        Debug.Log("in bbox script start");
+        collider = GetComponent<Collider>();
+        renderer = GetComponent<Renderer>();
+
+
+        Debug.Log("before get collider");
         var bounds = collider.bounds;
+        Debug.Log("after get collider");
+        Debug.Log(collider);
+        Debug.Log(bounds);
         cameraFrustum = GeometryUtility.CalculateFrustumPlanes(camera);
         // Debug.Log(cameraFrustum);
         bool IsInCameraView = GeometryUtility.TestPlanesAABB(cameraFrustum,bounds);
