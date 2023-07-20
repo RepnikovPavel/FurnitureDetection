@@ -17,8 +17,8 @@ public class Spawner : MonoBehaviour
     private Dictionary<int,Light> Lights = new Dictionary<int, Light>();
 
 
-    float[] placement_area = new float[]{-5.0f, 5.0f, -2.0f,-2.0f, -5.0f, 5.0f};
-    float[] light_placement_area = new float[]{-10.0f, 10.0f, 1.0f,5.0f, -10.0f, 10.0f};
+    public float[] placement_area = new float[]{-5.0f, 5.0f, 0.0f,0.0f, -5.0f, 5.0f};
+    public float[] light_placement_area = new float[]{-10.0f, 10.0f, 0.0f,5.0f, -10.0f, 10.0f};
 
     public GameObject wall0;
     public GameObject wall1;
@@ -72,9 +72,11 @@ public class Spawner : MonoBehaviour
             var x_ = Random.Range(placement_area[0],placement_area[1]);
             var y_ = Random.Range(placement_area[2],placement_area[3]);
             var z_ = Random.Range(placement_area[4],placement_area[5]);
-            var phi_ = Random.Range(0.0f,180.0f);
+            // var phi_ = Random.Range(0.0f,180.0f);
+            // var psi_ = Random.Range(0.0f,180.0f);
+            var phi_ = 0.0f;
             var psi_ = Random.Range(0.0f,180.0f);
-            var dzi_ = Random.Range(0.0f,180.0f);
+            var dzi_ = 0.0f;
             
 
             ObjInScene.transform.localPosition = new Vector3(x_,y_,z_);
@@ -171,13 +173,15 @@ public class Spawner : MonoBehaviour
             var x_ = Random.Range(placement_area[0],placement_area[1]);
             var y_ = Random.Range(placement_area[2],placement_area[3]);
             var z_ = Random.Range(placement_area[4],placement_area[5]);
-            var phi_ = Random.Range(0.0f,180.0f);
+            // var phi_ = Random.Range(0.0f,180.0f);
+            // var psi_ = Random.Range(0.0f,180.0f);
+            // var dzi_ = Random.Range(0.0f,180.0f);
+            var phi_ = 0.0f;
             var psi_ = Random.Range(0.0f,180.0f);
-            var dzi_ = Random.Range(0.0f,180.0f);
-            
+            var dzi_ = 0.0f;
 
             obj.transform.localPosition = new Vector3(x_,y_,z_);
-            obj.transform.eulerAngles = new Vector3(phi_,psi_,dzi_);
+            obj.transform.localEulerAngles = new Vector3(phi_,psi_,dzi_);
 
             // Change smoothness of metallic property of material
             var mr = obj.GetComponent<MeshRenderer>();

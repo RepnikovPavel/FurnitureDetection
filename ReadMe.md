@@ -129,11 +129,11 @@ UnrealEngineOrUnity --> Get3dBoundingBoxed --> ProjectToTheCamera --> BBoxesOnIm
 
 
 
-# creating a dataset  
+# creating a 3d scene  
 
 ```mermaid
 graph LR 
-blenderkit --> fbx --> UnityAsset
+blenderkit --> fbx --> UnityAsset --> AssetLoader --> SceneStateGenerator
 ```
 
 
