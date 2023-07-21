@@ -55,7 +55,7 @@ public class MoveAroundObject : MonoBehaviour
     // private float _smoothTime = 0.2f;
 
     // [SerializeField]
-    private Vector2 _rotationXMinMax = new Vector2(-40, 40);
+    // private Vector2 _rotationXMinMax = new Vector2(-40, 40);
 
     // public GameObject player;
 
@@ -70,27 +70,36 @@ public class MoveAroundObject : MonoBehaviour
 
     private Vector3[] CameraPositions;
     private Vector3[] CameraDirections;
-    private int CurrentCamereState = 0;
+    private int CurrentCamereState;
 
     Camera camera;
 
     COCODatasetAnnotation dataset;
-    private int CurrentImageId=0;
-    private int CurrentAnnotationId=0;
+    private int CurrentImageId;
+    private int CurrentAnnotationId;
 
     public int number_of_images_;
 
     IEnumerator Start(){
         
-        number_of_images_ = 50;
+        CurrentCamereState =0;
+        CurrentImageId=0;
+        CurrentAnnotationId=0;
+        camerabox = new float[]{-5.4f, 5.4f, 0.5f, 2.0f, -5.4f, 5.4f};
+        // camerabox = new float[]{-5.4f, 5.4f, 10.0f, 20.0f, -5.4f, 5.4f};
+
         camera = Camera.main;
         spawnercomp = spawner.GetComponent("Spawner") as Spawner;
 
         // USING spawner as namespace
         spawnercomp.InitDictWithPrefabs();
         spawnercomp.LoadFurniturePrefabs();
-        spawnercomp.CreateObjectsInScene();
-        spawnercomp.CreateLightInScene();
+
+
+
+        // spawnercomp.LoadFurniturePrefabs();
+        // // spawnercomp.CreateObjectsInScene();
+        // spawnercomp.CreateLightInScene();
         // while(true){
         //     if(spawnercomp.IsStartEnd){
         //         break;
@@ -124,9 +133,6 @@ public class MoveAroundObject : MonoBehaviour
             dataset.categories.Add(new category_cortege(){supercategory="furniture",id=category_id,name=category_name_});
         }
         // Debug.Log("after store categories");
-
-
-        camerabox = new float[]{-5.2f, 5.2f, 0.2f, 2.0f, -5.2f, 5.2f};
 
         // SET camera position to object spawner position
         camera.transform.position = spawner.transform.position;
@@ -176,11 +182,14 @@ public class MoveAroundObject : MonoBehaviour
         CameraPositions = positions;
         CameraDirections = directions;
 
+        // minima number of images 
+        // number_of_images_ = spawnercomp.PrefabsNames.Length*CameraPositions.Length;
+        number_of_images_ = Mathf.Max(1000,spawnercomp.PrefabsNames.Length*CameraPositions.Length);
 
         Cursor.visible = false;
         while (true){
-            Debug.Log(CurrentImageId);
-            Debug.Log(number_of_images_);
+            // Debug.Log(CurrentImageId);
+            // Debug.Log(number_of_images_);
             if(CurrentImageId>=number_of_images_){
                 break;
             }
@@ -194,104 +203,7 @@ public class MoveAroundObject : MonoBehaviour
     }
     void Update()
     {
-        // float mouseX = Input.GetAxis("Mouse X") * _mouseSensitivity;
-        // float mouseY = Input.GetAxis("Mouse Y") * _mouseSensitivity * (-1.0f);
 
-        // _rotationY += mouseX;
-        // _rotationX += mouseY;
-
-        // // Apply clamping for x rotation 
-        // _rotationX = Mathf.Clamp(_rotationX, _rotationXMinMax.x, _rotationXMinMax.y);
-
-        // Vector3 nextRotation = new Vector3(_rotationX, _rotationY);
-
-        // // Apply damping between rotation changes
-        // _currentRotation = Vector3.SmoothDamp(_currentRotation, nextRotation, ref _smoothVelocity, _smoothTime);
-        // transform.localEulerAngles = _currentRotation;
-
-        // // Substract forward vector of the GameObject to point its forward vector to the target
-        // transform.position = _target.position - transform.forward * _distanceFromTarget;
-        // save screen texture to png 
-
-        
-        // // MOVE camera
-
-        // if (Input.GetKeyDown("r"))
-        // {
-        //     // Debug.Log("key pressed");
-        //     NextCameraState();
-        // }
-
-
-        // // COMPUTE bboxes 
-        // Objs = spawnercomp.Objs;
-        // ObjsBoxes = spawnercomp.ObjsBoxes;
-
-        // var ObjRects = new Dictionary<int, Rect>();
-        // var ObjZ = new Dictionary<int, float>();
-        // // Debug.Log(ObjsBoxes);
-        // // Debug.Log(spawnercomp);
-        // foreach(var pair in ObjsBoxes){
-        //     var objid_=  pair.Key;
-        //     var box_ = pair.Value;
-        //     var rect_ = box_.GetBoxIfInCameraView();
-        //     // Debug.Log(rect_);
-        //     if(rect_.width>=0.0f){
-        //         ObjRects.Add(objid_,rect_);
-        //         ObjZ.Add(objid_,box_.CurrentZ);
-        //     }
-        // }
-        // var all_ids_ = ObjRects.Keys;
-        // var ToDatsetIds = new List<int>();
-        // foreach(var objid in all_ids_){
-        //     // is the current bbox nested in others?
-        //     // if yes, and it is further away from the camera, then you do not need to draw or record it
-        //     bool IsNotInside = true;
-        //     foreach(var anotherid in all_ids_){
-        //         if(objid == anotherid){
-        //             continue;
-        //         }
-        //         var isinside = IsAInsideB(ObjRects[objid],ObjRects[anotherid]);
-        //         // Debug.Log(isinside);
-        //         // Debug.Log(ObjZ[objid]);
-        //         if( isinside && (ObjZ[objid]>ObjZ[anotherid])){
-        //             IsNotInside = false;
-        //             ObjsBoxes[objid].DoINeedToDrawRect = false;
-        //             break;
-        //         }
-
-        //     }
-        //     if(IsNotInside){
-        //         ToDatsetIds.Add(objid);
-        //     }
-
-        // }
-
-        // // rendering step
-        // foreach(var objid in ToDatsetIds){
-        //     // Debug.Log(objid);
-        //     var obj_ = ObjsBoxes[objid];
-        //     // obj_.DoINeedToDrawRect = true;
-        //     obj_.DoINeedToDrawRect = false;
-
-        // }
-
-        // // store to dataset
-        // foreach(var objid in ToDatsetIds){
-        //     // Debug.Log(objid);
-        //     var obj_ = ObjsBoxes[objid];
-
-        // }
-        // var cat_1 = new category_cortege(){supercategory="furniture",id=1,name="stool_1"};
-        // var cat_2 = new category_cortege(){supercategory="furniture",id=2,name="stool_2"};
-        // CategoriesTable categories = new CategoriesTable();
-        // categories.categories.Add(cat_1);
-        // categories.categories.Add(cat_2);
-    
-        // string json = JsonUtility.ToJson(categories);
-        // Debug.Log(json);
-        // File.WriteAllText(Application.dataPath + "/DATASET/ANNOTATIONS/annotations.json",JsonUtility.ToJson(json));
-        // Debug.Log("after write");
     }
 
     void ClearDir(string path){
@@ -331,7 +243,7 @@ public class MoveAroundObject : MonoBehaviour
     // }
 
     IEnumerator WriteImg_(){
-
+        Debug.Log("{"+CurrentImageId.ToString()+"}/{"+number_of_images_.ToString()+"}");
         // Debug.Log("write img call");
         // MOVE camera
 
@@ -396,66 +308,58 @@ public class MoveAroundObject : MonoBehaviour
             obj_.DoINeedToDrawRect = false;
 
         }
+        // if ToDatsetIds.Count ==0 then there are no boxes - camera is set in wrong position or direction
+        if(ToDatsetIds.Count!=0){
 
-        // store annotations to dataset
-        foreach(var objid in ToDatsetIds){
-            // Debug.Log(objid);
-            var obj_ = ObjsBoxes[objid];
-            var rect_ = XldYldWH_TO_XtlYtlWH(ObjRects[objid]);
-            var category_name = obj_.category;
-            // Debug.Log(category_name);
-            float[] bbox = new float[]{rect_.x,rect_.y,rect_.width,rect_.height};
-            var category_id =  spawnercomp.Categories[category_name];
-            // Debug.Log(category_id);
-            dataset.annotations.Add(new annotation_cortege(){
-                image_id = CurrentImageId,
-                bbox= bbox,
-                category_id = category_id,
-                id = CurrentAnnotationId
+            // store annotations to dataset
+            foreach(var objid in ToDatsetIds){
+                // Debug.Log(objid);
+                var obj_ = ObjsBoxes[objid];
+                var rect_ = XldYldWH_TO_XtlYtlWH(ObjRects[objid]);
+                var category_name = obj_.category;
+                // Debug.Log(category_name);
+                float[] bbox = new float[]{rect_.x,rect_.y,rect_.width,rect_.height};
+                var category_id =  spawnercomp.Categories[category_name];
+                // Debug.Log(category_id);
+                dataset.annotations.Add(new annotation_cortege(){
+                    image_id = CurrentImageId,
+                    bbox= bbox,
+                    category_id = category_id,
+                    id = CurrentAnnotationId
+                });
+                CurrentAnnotationId +=1;
+            }
+            // Debug.Log("before wait for end of frame");
+            yield return new WaitForEndOfFrame();
+
+            // STORE image to dataset
+
+            // Debug.Log("after wair end of frame");
+            // Debug.Log("write img call");
+            var viewport_rect = camera.pixelRect;
+            int width = (int)viewport_rect.width;
+            int height = (int)viewport_rect.height;
+
+            Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+            tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+            tex.Apply();
+            
+            byte[] pngbytes = ImageConversion.EncodeToPNG(tex);
+            // Debug.Log("before create image name");
+            var img_name_ = "_"+CurrentImageId.ToString()+".png";
+            // Debug.Log(img_name_);
+            // Debug.Log("before write to disk");
+
+            dataset.images.Add(new image_cortage(){
+                file_name =img_name_,
+                height = height,
+                width = width,
+                id = CurrentImageId
             });
-            CurrentAnnotationId +=1;
+
+            File.WriteAllBytes(path: Application.dataPath+"/DATASET/IMAGES/"+img_name_,bytes: pngbytes);
+            CurrentImageId+=1;
         }
-        // Debug.Log("before wait for end of frame");
-        yield return new WaitForEndOfFrame();
-
-        // STORE image to dataset
-
-        // Debug.Log("after wair end of frame");
-        // Debug.Log("write img call");
-        var viewport_rect = camera.pixelRect;
-        int width = (int)viewport_rect.width;
-        int height = (int)viewport_rect.height;
-
-        Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
-        tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
-        tex.Apply();
-        
-        byte[] pngbytes = ImageConversion.EncodeToPNG(tex);
-        // Debug.Log("before create image name");
-        var img_name_ = "_"+CurrentImageId.ToString()+".png";
-        // Debug.Log(img_name_);
-        // Debug.Log("before write to disk");
-
-        dataset.images.Add(new image_cortage(){
-            file_name =img_name_,
-            height = height,
-            width = width,
-            id = CurrentImageId
-        });
-
-        File.WriteAllBytes(path: Application.dataPath+"/DATASET/IMAGES/"+img_name_,bytes: pngbytes);
-        CurrentImageId+=1;
-        // Debug.Log("after save image to disk");
-
-
-        // 
-        // camera.targetTexture = scrRenderTexture;
-        // camera.Render();
-        // camera.targetTexture = camRenderTexture;
-// 
-        // RenderTexture.active = scrRenderTexture;
-        // scrTexture.ReadPixels(new Rect(0, 0, scrTexture.width, scrTexture.height), 0, 0);
-        // scrTexture.Apply();
     }
 
     Rect XldYldWH_TO_XtlYtlWH(Rect rect){
@@ -485,12 +389,9 @@ public class MoveAroundObject : MonoBehaviour
 
     void NextSceneState(){
         // CALL before call NextCameraState()
-        if(CurrentCamereState < CameraPositions.Length){
-            return;
-        }
-        Debug.Log("before change state");
-        spawnercomp.ChangeStateOfScene();
-        Debug.Log("after cnage state of scene");
+        // Debug.Log("before change state");
+        spawnercomp.ChangeStateOfScene(CurrentCamereState, CameraPositions.Length);
+        // Debug.Log("after cnage state of scene");
     }
 
     void PrepareScene(){

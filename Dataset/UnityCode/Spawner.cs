@@ -20,6 +20,9 @@ public class Spawner : MonoBehaviour
     public float[] placement_area = new float[]{-5.0f, 5.0f, 0.0f,0.0f, -5.0f, 5.0f};
     public float[] light_placement_area = new float[]{-10.0f, 10.0f, 0.0f,5.0f, -10.0f, 10.0f};
 
+    private int last_id_ = 0;
+    public int current_index_of_batch_=0;
+    public bool IsInitStep = true; 
     public GameObject wall0;
     public GameObject wall1;
     public GameObject wall2;
@@ -112,12 +115,42 @@ public class Spawner : MonoBehaviour
         // }
     }
     public void CreateObjectsInScene(){
-        int last_id_ = 0;
+
         int low_ = 0;
         int high_ = PrefabsNames.Length-1;
-        int num_of_objects_ = 15;
+        int num_of_objects_ = 3 + (int)Random.Range(0.0f,5.0f);
+
+
+        // GENERATE object from ith prefab
+        // to ensure that all prefabs are included in the data set guaranteed
+
+        if(current_index_of_batch_>=PrefabsNames.Length){
+            current_index_of_batch_ =0;
+        }
+
+        var forced_prefab_name_ = PrefabsNames[current_index_of_batch_];
+        var forsed_obj_ = Instantiate(Prefabs[forced_prefab_name_]);
+        var bbox_ = forsed_obj_.GetComponent("BBOX") as BBOX;
+        var forced_category = PrefabCategory[current_index_of_batch_];
+        bbox_.category = forced_category;
+        bbox_.object_id = last_id_;
+        var x__ = Random.Range(placement_area[0],placement_area[1]);
+        var y__ = Random.Range(placement_area[2],placement_area[3]);
+        var z__ = Random.Range(placement_area[4],placement_area[5]);
+        // var phi_ = Random.Range(0.0f,180.0f);
+        // var psi_ = Random.Range(0.0f,180.0f);
+        var phi__ = 0.0f;
+        var psi__ = Random.Range(0.0f,180.0f);
+        var dzi__ = 0.0f;
+        forsed_obj_.transform.position = transform.position + new Vector3(x__,y__,z__);
+        forsed_obj_.transform.eulerAngles =new Vector3(phi__,psi__,dzi__);
+        Objs.Add(bbox_.object_id, forsed_obj_);
+        ObjsBoxes.Add(bbox_.object_id, bbox_);
+        last_id_ +=1;
+
+        // GENERATE objs from random prefab
         // x1 x2 y1 y2 z1 z2
-        for(var i =0; i< num_of_objects_;i++){
+        for(var i =1; i< num_of_objects_-1;i++){
             int name_pos_ = Mathf.RoundToInt(Random.Range((float)low_,(float)high_));
             var prefab_name_ = PrefabsNames[name_pos_];
             var ObjInScene = Instantiate(Prefabs[prefab_name_]);
@@ -148,7 +181,23 @@ public class Spawner : MonoBehaviour
             ObjsBoxes.Add(bbox.object_id, bbox);
             last_id_ +=1;
         }
-
+        current_index_of_batch_ +=1;
+    }
+    public void DeteleObjectsInScene(){
+        foreach(var pair in Objs){
+            var objid = pair.Key;
+            var Obj = pair.Value;
+            // var ObjBox =  ObjsBoxes[objid];
+            Destroy(Obj);
+        }
+        foreach(var pair in ObjsBoxes){
+            var objid = pair.Key;
+            var Obj = pair.Value;
+            // var ObjBox =  ObjsBoxes[objid];
+            Destroy(Obj);
+        }
+        Objs.Clear();
+        ObjsBoxes.Clear();
     }
     public void CreateLightInScene(){
         LBulbPrefab = Resources.Load("LBulb") as GameObject;
@@ -178,8 +227,19 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    public void ChangeStateOfScene(){
+    public void ChangeStateOfScene(int camera_state, int number_of_camera_states){
         
+        if (IsInitStep){
+            CreateLightInScene();
+            CreateObjectsInScene();
+            IsInitStep = false;
+        }
+        if (camera_state>=number_of_camera_states){
+            // need reload new objects to scene
+            DeteleObjectsInScene();
+            CreateObjectsInScene();
+        }
+
         var smoothness_range = new float[]{0.0f,1.0f};
         var light_range = new int[]{1,150};
         // UPDATE positions and rotations of furniture
