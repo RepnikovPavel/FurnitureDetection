@@ -78,19 +78,25 @@ public class MoveAroundObject : MonoBehaviour
     private int CurrentImageId=0;
     private int CurrentAnnotationId=0;
 
-    public int number_of_images_ = 10;
+    public int number_of_images_;
 
     IEnumerator Start(){
         
-
+        number_of_images_ = 50;
         camera = Camera.main;
         spawnercomp = spawner.GetComponent("Spawner") as Spawner;
-        while(true){
-            if(spawnercomp.IsStartEnd){
-                break;
-            }
-        }
-        Debug.Log("stat is over");
+
+        // USING spawner as namespace
+        spawnercomp.InitDictWithPrefabs();
+        spawnercomp.LoadFurniturePrefabs();
+        spawnercomp.CreateObjectsInScene();
+        spawnercomp.CreateLightInScene();
+        // while(true){
+        //     if(spawnercomp.IsStartEnd){
+        //         break;
+        //     }
+        // }
+        // Debug.Log("start is over");
 
         // CREATE directory with dataset
         if(!Directory.Exists(Application.dataPath+"/DATASET")){
@@ -111,14 +117,16 @@ public class MoveAroundObject : MonoBehaviour
         // FILL categories to dataset
         // Debug.Log(spawnercomp.PrefabCategory);
         // Debug.Log(spawnercomp.PrefabCategory.Count);
-        for(var i=0;i<spawnercomp.PrefabCategory.Count;i++){
+        foreach(var pair in spawnercomp.Categories){
             // Debug.Log(i.ToString("R"));
-            dataset.categories.Add(new category_cortege(){supercategory="furniture",id=i,name=spawnercomp.PrefabCategory[i]});
+            var category_id = pair.Value;
+            var category_name_ = pair.Key;
+            dataset.categories.Add(new category_cortege(){supercategory="furniture",id=category_id,name=category_name_});
         }
         // Debug.Log("after store categories");
 
 
-        camerabox = new float[]{-5.0f, 5.0f, 0.0f, 3.0f, -5.0f, 5.0f};
+        camerabox = new float[]{-5.2f, 5.2f, 0.2f, 2.0f, -5.2f, 5.2f};
 
         // SET camera position to object spawner position
         camera.transform.position = spawner.transform.position;
@@ -127,54 +135,7 @@ public class MoveAroundObject : MonoBehaviour
         // Debug.Log(camerabox);
 
         // SET camera pisition and directions                                                                                                                                                                                                                           
-                                                                                                                                                                                                                                                                                                                                                                                               
-        // .?Y.     ~5!                                                                                                                                                                                                                                                                       
-        // ^GB^   ?&J.                                                                                                                                                                                                                                                                       
-        // J&7.5#~                                                                                                                                                                                                                                                                         
-        //     !##P.                                                                                                                                                                                                                                                                          
-        //     J@^                                                                                                                                                                                                                                                                           
-        //     Y@^                                                                                                                                                                                                                                                                           
-        //     ~?.                                                                                                                                                                                                                                                                           
-                                                                                                                                                                                                                                                                                        
-        //     ~                                                                                                                                                                                                                                                                            
-        //     5                                                                                                                                                                                                                                                                            
-        //     Y                                                                                                                                                                                                                                                                            
-        //     Y                                                                                                                                                                                                                                                                            
-        //     Y                                                                                                                                                                                                                                                                            
-        //     Y                                                                                                                                                                                                                                                                            
-        //     Y                                                                                                                                                                                                                                                                            
-        // by  Y                                                                                                                                                                                                                                                                            
-        //     Y                                                                                                                                                                                                                                                                            
-        //     Y                                                                                                                                                                                                                                                                            
-        //     Y                                                                                                                                                                                                                                                                            
-        //     Y                                                                                                                                                                                                                                                                            
-        //     Y                                                                                                                                                                                                                                                                            
-        //     Y                                                                                                                                                                                                                                                                            
-        //     Y                                   ~???7??:                                                                                                                                                                                                                                 
-        //     Y                                   :~^^Y@5.                                                                                                                                                                                                                                 
-        //     Y                                     .5B!                                                                                                                                                                                                                                   
-        //     Y                                    !BY.                                                                                                                                                                                                                                    
-        //     Y                                   5@P7777^                                                                                                                                                                                                                                 
-        //     Y                                   ~~~~~~~:                                                                                                                                                                                                                                 
-        //     Y                               :~.                                                                                                                                                                                                                                          
-        //     Y                             :~^                                                                                                                                                                                                                                            
-        //     Y                     bz    ^~^                                                                                                                                                                                                                                              
-        // ay  Y                        .^~:                                                                                                                                                                                                                                                
-        //     Y                      .^~:                                                                                                                                                                                                                                                  
-        //     Y                    .~~.                                                                                                                                                                                                                                                    
-        //     Y                  :~~.                                                                                                                                                                                                                                                      
-        //     Y                :~^.                                                                                                                                                                                                                                                        
-        //     Y        az    :~^                                                                                                                                                                                                                                                           
-        //     Y            ^~^                                                                                                                                                                                                                                                             
-        //     Y         .^~:                                                                                                                                                                                                                                                               
-        //     Y       .^~:                                                                                                                                                                                                                                                                 
-        //     Y     .~~.                                                                                                                                                                                                                                                                   
-        //     Y   :~~.                                                                                                      ^!.   ~!.                                                                                                                                                      
-        //     Y :~^                                                                                                         ^GG: Y#!                                                                                                                                                       
-        //     P?!^::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::      ?BBP.                                                                                                                                                        
-        //     ^^:^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^.     JBGP:                                                                                                                                                        
-        //                    ax                               bx                                                              ^GP. J#7                                                                                                                                                       
-        //                                                                                                                     ~!    ^7.                                                                                                      !7.          ~G7                                                                                                                                                 
+                                                                                                                                          
         var ax = camerabox[0];                                                                                                                                                                                                                                                                                                                                                                                           
         var bx = camerabox[1];                                                                                                                                                                                                                                                                                                                                                                                           
         var ay = camerabox[2];                                                                                                                                                                                                                                                                                                                                                                                           
@@ -218,6 +179,8 @@ public class MoveAroundObject : MonoBehaviour
 
         Cursor.visible = false;
         while (true){
+            Debug.Log(CurrentImageId);
+            Debug.Log(number_of_images_);
             if(CurrentImageId>=number_of_images_){
                 break;
             }
@@ -369,7 +332,7 @@ public class MoveAroundObject : MonoBehaviour
 
     IEnumerator WriteImg_(){
 
-        Debug.Log("write img call");
+        // Debug.Log("write img call");
         // MOVE camera
 
         // if (Input.GetKeyDown("r"))
@@ -440,8 +403,10 @@ public class MoveAroundObject : MonoBehaviour
             var obj_ = ObjsBoxes[objid];
             var rect_ = XldYldWH_TO_XtlYtlWH(ObjRects[objid]);
             var category_name = obj_.category;
+            // Debug.Log(category_name);
             float[] bbox = new float[]{rect_.x,rect_.y,rect_.width,rect_.height};
-            var category_id =  spawnercomp.PrefabCategoryIdByName[category_name];
+            var category_id =  spawnercomp.Categories[category_name];
+            // Debug.Log(category_id);
             dataset.annotations.Add(new annotation_cortege(){
                 image_id = CurrentImageId,
                 bbox= bbox,
@@ -523,7 +488,9 @@ public class MoveAroundObject : MonoBehaviour
         if(CurrentCamereState < CameraPositions.Length){
             return;
         }
+        Debug.Log("before change state");
         spawnercomp.ChangeStateOfScene();
+        Debug.Log("after cnage state of scene");
     }
 
     void PrepareScene(){

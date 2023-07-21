@@ -29,47 +29,102 @@ public class Spawner : MonoBehaviour
 
     public string[] PrefabsNames;
     public Dictionary<int,string> PrefabCategory = new Dictionary<int, string>();
-    public Dictionary<string,int> PrefabCategoryIdByName = new Dictionary<string, int>();
-    
+    // public List<KeyValuePair<string,int>> PrefabCategoryIdByName = new List<KeyValuePair<string, int>>();
+    public Dictionary<string,int> Categories = new Dictionary<string, int>();
+
     public bool IsStartEnd = false;
     // Start is called before the first frame update
     void Start()
     {   
+        IsStartEnd = true;
+    }
+    // Update is called once per frame
+    void Update()
+    {
+    }
+
+    public void InitDictWithPrefabs(){
+        Categories.Add("stool",0);
+        Categories.Add("chair",1);
+        Categories.Add("sofa",2);
+        Categories.Add("bench",3);
+        Categories.Add("bed",4);
+        Categories.Add("TV",5);
+        Categories.Add("table",6);
+        Categories.Add("wardrobe",7);
+        Categories.Add("storage",8);
+        Categories.Add("refrigerator",9);
+        Categories.Add("microwave",10);
 
 
         PrefabsNames = new string[]{
             "stool_1",
-            "stool_2"
+            "stool_2",
+            "chair_1",
+            "chair_2",
+            "sofa_1",
+            "sofa_2",
+            "bench_1",
+            "bench_2",
+            "bed_1",
+            "bed_2",
+            "TV_1",
+            "table_1",
+            "table_2",
+            "table_3",
+            "wardrobe_1",
+            "storage_1",
+            "storage_2",
+            "refrigerator_1",
+            "microwave_1"
         }; 
+        
         // Debug.Log(PrefabCategory);
-        PrefabCategory.Add(0,"stool_1");
-        PrefabCategory.Add(1,"stool_2");
-
-        // LOAD furniture prefabs
+        PrefabCategory.Add(0,"stool");
+        PrefabCategory.Add(1,"stool");
+        PrefabCategory.Add(2,"chair");
+        PrefabCategory.Add(3,"chair");
+        PrefabCategory.Add(4,"sofa");
+        PrefabCategory.Add(5,"sofa");
+        PrefabCategory.Add(6,"bench");
+        PrefabCategory.Add(7,"bench");
+        PrefabCategory.Add(8,"bed");
+        PrefabCategory.Add(9,"bed");
+        PrefabCategory.Add(10,"TV");
+        PrefabCategory.Add(11,"table");
+        PrefabCategory.Add(12,"table");
+        PrefabCategory.Add(13,"table");
+        PrefabCategory.Add(14,"wardrobe");
+        PrefabCategory.Add(15,"storage");
+        PrefabCategory.Add(16,"storage");
+        PrefabCategory.Add(17,"refrigerator");
+        PrefabCategory.Add(18,"microwave");
+    }
+    public void LoadFurniturePrefabs(){
         for(var i=0;i<PrefabsNames.Length;i++){
+            // Debug.Log(PrefabsNames[i]);
             var prefab = Resources.Load(PrefabsNames[i]) as GameObject; 
             Prefabs.Add(PrefabsNames[i], prefab);
         }
-        for(var i= 0;i<PrefabsNames.Length;i++){
-            PrefabCategoryIdByName.Add(PrefabCategory[i],i);
-        }
-
-        // GENERATE objects in scene
+        // for(var i= 0;i<PrefabsNames.Length;i++){
+        //     Debug.Log(PrefabCategory[i]);
+        //     PrefabCategoryIdByName.Add(new KeyValuePair<string,int>(PrefabCategory[i],i));
+        // }
+    }
+    public void CreateObjectsInScene(){
         int last_id_ = 0;
         int low_ = 0;
         int high_ = PrefabsNames.Length-1;
-        int num_of_objects_ = 10;
+        int num_of_objects_ = 15;
         // x1 x2 y1 y2 z1 z2
-
-
         for(var i =0; i< num_of_objects_;i++){
             int name_pos_ = Mathf.RoundToInt(Random.Range((float)low_,(float)high_));
             var prefab_name_ = PrefabsNames[name_pos_];
             var ObjInScene = Instantiate(Prefabs[prefab_name_]);
-
             var bbox = ObjInScene.GetComponent("BBOX") as BBOX;
             // Debug.Log(bbox);
             // SET category name and object in scene id
+            // Debug.Log(PrefabCategory[name_pos_]);
             bbox.category = PrefabCategory[name_pos_];
             bbox.object_id = last_id_;
 
@@ -84,19 +139,18 @@ public class Spawner : MonoBehaviour
             var dzi_ = 0.0f;
             
 
-            ObjInScene.transform.localPosition = new Vector3(x_,y_,z_);
-            ObjInScene.transform.eulerAngles = new Vector3(phi_,psi_,dzi_);
+            ObjInScene.transform.position = transform.position + new Vector3(x_,y_,z_);
+            ObjInScene.transform.eulerAngles =new Vector3(phi_,psi_,dzi_);
             // Debug.Log(ObjInScene.transform.position);
 
             // Debug.Log(ObjInScene);
             Objs.Add(bbox.object_id, ObjInScene);
             ObjsBoxes.Add(bbox.object_id, bbox);
-
-
             last_id_ +=1;
         }
 
-        // LOAD light prefab
+    }
+    public void CreateLightInScene(){
         LBulbPrefab = Resources.Load("LBulb") as GameObject;
 
         // GENERATE light bulbs
@@ -111,7 +165,7 @@ public class Spawner : MonoBehaviour
             var z_ = Random.Range(light_placement_area[4],light_placement_area[5]);
 
 
-            ObjInScene.transform.localPosition = new Vector3(x_,y_,z_);
+            ObjInScene.transform.position = transform.position+ new Vector3(x_,y_,z_);
 
             LightsObjs.Add(light_id_, ObjInScene);
             GameObject child = ObjInScene.transform.GetChild(0).gameObject;
@@ -122,48 +176,6 @@ public class Spawner : MonoBehaviour
 
             light_id_ +=1;
         }
-        IsStartEnd = true;
-        // Debug.Log(IsStartEnd);
-
-        // Debug.Log("Assets/objects/Cube.prefab");
-        // Assets/Resources/Cube.prefab
-        // ax bx ay by        
-        // float[] box = {0.0f, 10.0f, 0.0f, 10.0f};
-
-        // var prefab = Resources.Load("stool_2") as GameObject;
-        // var mesh = prefab.GetComponent<Mesh>();
-        // mesh.setM
-        // var mesh = Resources.Load("_1") as Mesh;
-        // prefab.GetComponent<MeshFilter>().mesh = mesh;
-        // Debug.Log(prefab);
-
-        // var ObjInScene = Instantiate(prefab);
-        // var bbox = ObjInScene.GetComponent("BBOX") as BBOX;
-        // bbox.category = "custom_category_name";
-        // bbox.object_id = 1;
-
-        // // Debug.Log(ObjInScene.transform.position);
-        // ObjInScene.transform.position = new Vector3(0.0f,-1.3f,0.0f);
-        // ObjInScene.transform.eulerAngles = new Vector3(0.0f,0.0f,0.0f);
-        // // Debug.Log(ObjInScene.transform.position);
-
-        // var mr = ObjInScene.GetComponent<MeshRenderer>();
-        // // mr.material.shader = Shader.Find ("Standard");
-        // // mr.material.SetFloat("_Glossiness", 1.0f);
-        // mr.material.SetFloat("_GlossMapScale", 1.0f);
-        // Objs.Add(bbox.object_id, ObjInScene);
-        // ObjsBoxes.Add(bbox.object_id, bbox);
-        
-    
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        // if (Input.GetKeyDown("q"))
-        // {
-        //     // Debug.Log("key pressed");
-        //     ChangeStateOfScene();
-        // }
     }
 
     public void ChangeStateOfScene(){
@@ -186,12 +198,12 @@ public class Spawner : MonoBehaviour
             var psi_ = Random.Range(0.0f,180.0f);
             var dzi_ = 0.0f;
 
-            obj.transform.localPosition = new Vector3(x_,y_,z_);
+            obj.transform.position = transform.position+ new Vector3(x_,y_,z_);
             obj.transform.localEulerAngles = new Vector3(phi_,psi_,dzi_);
 
             // Change smoothness of metallic property of material
-            var mr = obj.GetComponent<MeshRenderer>();
-            mr.material.SetFloat("_GlossMapScale", Random.Range(smoothness_range[0],smoothness_range[1]));
+            // var mr = obj.GetComponent<MeshRenderer>();
+            // mr.material.SetFloat("_GlossMapScale", Random.Range(smoothness_range[0],smoothness_range[1]));
         }
         
         // UPDATE ligths positions
@@ -204,7 +216,7 @@ public class Spawner : MonoBehaviour
             var z_ = Random.Range(light_placement_area[4],light_placement_area[5]);
 
 
-            LightHolder.transform.localPosition = new Vector3(x_,y_,z_);
+            LightHolder.transform.position = transform.position+ new Vector3(x_,y_,z_);
         }
 
         // UPDATE brightness of lights
