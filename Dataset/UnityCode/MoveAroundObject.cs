@@ -80,7 +80,9 @@ public class MoveAroundObject : MonoBehaviour
 
     public int number_of_images_;
 
-    IEnumerator Start(){
+    private Coroutine coroutine_;
+    
+    void Start(){
         
         CurrentCamereState =0;
         CurrentImageId=0;
@@ -185,25 +187,40 @@ public class MoveAroundObject : MonoBehaviour
         // minima number of images 
         // number_of_images_ = spawnercomp.PrefabsNames.Length*CameraPositions.Length;
         number_of_images_ = Mathf.Max(1000,spawnercomp.PrefabsNames.Length*CameraPositions.Length);
-
+        // number_of_images_ = 1000;
         Cursor.visible = false;
-        while (true){
-            // Debug.Log(CurrentImageId);
-            // Debug.Log(number_of_images_);
-            if(CurrentImageId>=number_of_images_){
-                break;
-            }
-            yield return WriteImg_();
-        }
-        Debug.Log("images are recorded");
-        Debug.Log("recording annotations ...");
-        File.WriteAllText(Application.dataPath + "/DATASET/ANNOTATIONS/annotations.json",JsonUtility.ToJson(dataset));
-        Debug.Log("annotations are recorded");
-
+        // coroutine_ = WriteImg_();
+        coroutine_ = StartCoroutine(WriteImg_());
     }
+    void MakeNextImage() {
+        if(CurrentImageId>=number_of_images_){
+                Debug.Log("images are recorded");
+                Debug.Log("recording annotations ...");
+                File.WriteAllText(Application.dataPath + "/DATASET/ANNOTATIONS/annotations.json",JsonUtility.ToJson(dataset));
+                Debug.Log("annotations are recorded");
+                Debug.Log("all data are corded to"+ Application.dataPath + "/DATASET/");
+            return;
+        }
+        else{
+            // it seems that stop coroutine not free memory anyway
+            StopCoroutine("WriteImg_");
+            coroutine_ = StartCoroutine(WriteImg_());
+        }
+
+    }   
     void Update()
     {
+        // if(CurrentImageId<number_of_images_){
+        //     WriteImg_();
+        // }
+        // if(CurrentImageId==number_of_images_){
+        //     Debug.Log("images are recorded");
+        //     Debug.Log("recording annotations ...");
+        //     File.WriteAllText(Application.dataPath + "/DATASET/ANNOTATIONS/annotations.json",JsonUtility.ToJson(dataset));
+        //     Debug.Log("annotations are recorded");
 
+        //     CurrentImageId+=1;
+        // }
     }
 
     void ClearDir(string path){
@@ -331,6 +348,7 @@ public class MoveAroundObject : MonoBehaviour
             }
             // Debug.Log("before wait for end of frame");
             yield return new WaitForEndOfFrame();
+            // Debug.Log("after wait for end of frame");
 
             // STORE image to dataset
 
@@ -359,7 +377,9 @@ public class MoveAroundObject : MonoBehaviour
 
             File.WriteAllBytes(path: Application.dataPath+"/DATASET/IMAGES/"+img_name_,bytes: pngbytes);
             CurrentImageId+=1;
+            Debug.Log("image is recorded");
         }
+        MakeNextImage();
     }
 
     Rect XldYldWH_TO_XtlYtlWH(Rect rect){
