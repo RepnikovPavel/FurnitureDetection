@@ -295,9 +295,11 @@ $$
     L = \alpha L_{classification} + \beta L_{regression} ,\alpha =1,\beta=1
 $$
 
-ep - epoch index
+ep - epoch index  
 
-![Alt text](https://drive.google.com/uc?id=1zOdDklqslVyWtyXlNyOXUFx6rwzsA9Hz)
+
+![Alt text](https://drive.google.com/uc?id=1zOdDklqslVyWtyXlNyOXUFx6rwzsA9Hz)  
+
 
 <!-- <div id="iframeDiv">
     <iframe src="https://drive.google.com/uc?id=1PvLDLon4oqIJbpUwf-hf9VA5A4Aw-WVy" iframetag style="width:1600px;height:900px;background color:red"></iframe>
