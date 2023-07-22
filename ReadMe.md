@@ -285,7 +285,7 @@ Components:
 
 [link to dataset](https://disk.yandex.ru/d/oaPkIglpbI00CA)
 
-## class distribution 
+## class distribution  
 <!-- https://drive.google.com/file/d/1PHppoAl-wbw_8oo0DCwmzO9EM3lS10Vj/view?usp=drive_link -->
 ![Alt text](https://drive.google.com/uc?id=1PHppoAl-wbw_8oo0DCwmzO9EM3lS10Vj)
 
@@ -316,7 +316,9 @@ https://drive.google.com/file/d/1PvLDLon4oqIJbpUwf-hf9VA5A4Aw-WVy/view?usp=drive
 
 
 ## mAP(train dataset)  
-model: SSD300_VGG16
+
+model: SSD300_VGG16  
+
 ![Alt text](https://drive.google.com/uc?id=1AAGMzuFqTDsyxQOgcIaKXr1VJhXKlluR)
 <!-- https://drive.google.com/file/d/1AAGMzuFqTDsyxQOgcIaKXr1VJhXKlluR/view?usp=drive_link -->
 
