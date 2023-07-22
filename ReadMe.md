@@ -58,17 +58,17 @@ $N$   - the number of predictions for this class
 $$
     scores = \{s_{1},...,s_{N}\}, s_{i} \geq s_{i+1}
 $$  
-___
+
 $$
-    precision_{i}^{*} = precision^{*}(bboxes[1:i],labels[1:i])
+    precision_{i}^{	\star} = precision^{\star}(bboxes[1:i],labels[1:i])
 $$  
-___
+
 $$
-    recall_{i}^{*} = recall^{*}(bboxes[1:i],labels[1:i])
+    recall_{i}^{\star} = recall^{\star}(bboxes[1:i],labels[1:i])
 $$  
-___
+
 $$
-    precision(recall) = \{(precision_{i}^{*},recall_{i}^{*}),i=\overline{1,N}\} 
+    precision(recall) = \{(precision_{i}^{\star},recall_{i}^{\star}),i=\overline{1,N}\} 
 $$     
 
 
