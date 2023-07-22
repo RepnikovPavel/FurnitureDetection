@@ -2,10 +2,10 @@
 
 # Metrics 
 
-jacard index  
+jacard index (intersection over union)  
 
 $$
-    JI = \frac{|A B|}{|A + B|}
+    JI =IOU= \frac{|A B|}{|A + B|}
 $$
 
 jacard coefficient
@@ -13,6 +13,23 @@ jacard coefficient
 $$
  JC = \frac{|AB|}{|A|+|B|-|AB|}
 $$
+
+**detection precision and recall**
+
+$TP$: $IOU>\alpha$ and $c_{predicted}=c_{ground \: truth}$ 
+$FP$: $IOU<\alpha$ or $c_{predicted} \neq c_{ground \: truth}$
+$FN$: $IOU < \alpha$  - the algorithm predict a box either outside the ground truth box of the object, or did not predict a box at all
+$TN$: the algorithm correctly did not pay attention to the specified area (box)
+
+$$
+    precision = \frac{TP}{TP+FP} \\ 
+    recall  = \frac{TP}{TP+FN}  \\ 
+    F_{\beta} = (1+\beta^{2})\frac{precision \cdot recall}{(\beta^{2} \cdot precision)+recall}
+$$
+
+$TP$ - number of hitting the targets
+$FN$ - number of skipping targets
+$FP$ - number of false alarms  
 
 **detection metrics**  
 
@@ -24,10 +41,19 @@ $$
 
 where $AP_{i}$ is the average precision for class $c_{i}$ and $n$ is the number of classes  
 
-AP (Average Precision)  
+For one class:  
+AP (Average Precision)   
 
 $$
-    AP = \sum_{i=1}^{n}{(R_{i}-R_{i-1})P_{i}} = \int_{0}^{1}{precision(recall)d(recall)}
+    AP = \sum_{i=1}^{N-1}{(R_{i+1}-R_{i})P_{i}} = \int_{0}^{1}{precision(recall)d(recall)}
+$$
+$N$ - the number of predictions for this class
+
+$$
+    scores = \{s_{1},...,s_{N}\}, s_{i} \geq s_{i+1} \\
+    precision_{i}^{*} = precision^{*}(bboxes[1:i],labels[1:i]) \\
+    recall_{i}^{*} = recall^{*}(bboxes[1:i],labels[1:i]) \\ 
+    precision(recall) = \{(precision_{i}^{*},recall_{i}^{*}),i=\overline{1,N}\} 
 $$
 
 

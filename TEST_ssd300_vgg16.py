@@ -80,48 +80,70 @@ BathcesOfPairs = GetPairsSplittedIntoBathces(DatasetIterator)
 
 labels_encoder = torch.load(conf.imgs_labels_encoder_filename)
 
-for b_i,batch in zip(range(len(BathcesOfPairs)),BathcesOfPairs):
-    # GET batch
-    # tagret: List[Dict['boxes','labels']]
-    # input to model : List[image tensor]
-    imgs = [imgbyURL[el[0]].to(device) for el in batch]
-    targets = [TargetDict_to_model_input(el[1]) for el in batch]
-    
-    # GET boxes,lables,scores on batch
-    BatchAns = model(imgs)
+
+def ssd300vgg16_output_to_human_format(ans):
+    # ans on one image
+    boxes = ans['boxes'].cpu().detach() # torch tensor
+    ls = np.squeeze(ans['labels'].cpu().detach().numpy())
+    scores = np.squeeze(ans['scores'].cpu().detach().numpy()) 
+    h_boxes = []  # 
+    h_labels = [] # List[str]
+    h_scores = [] # List[np.float32]
+    for i in range(len(ls)):
+        if ls[i] != conf.background_label:
+            h_labels.append(conf.from_category_id_to_category_name[labels_encoder.inverse_transform([ls[i]])[0]])
+            h_boxes.append(boxes[i].cpu().detach().numpy())
+            h_scores.append(scores[i])
+    return torch.tensor(np.array(h_boxes)).requires_grad_(False), h_labels, h_scores
+
+with torch.no_grad():
+    for b_i,batch in zip(range(len(BathcesOfPairs)),BathcesOfPairs):
+        # GET batch
+        # tagret: List[Dict['boxes','labels']]
+        # input to model : List[image tensor]
+        imgs = [imgbyURL[el[0]].to(device) for el in batch]
+        targets = [TargetDict_to_model_input(el[1]) for el in batch]
+        
+        # GET boxes,lables,scores on batch
+        BatchAns = model(imgs)
 
 
 
-    imgs_= []
-    for i,el in zip(range(len(batch)),batch):
-        fp_ = el[0]
-        img = read_image(el[0])
+        imgs_= []
+        for i,el in zip(range(len(batch)),batch):
+            fp_ = el[0]
+            img = read_image(el[0])
+            boxes, labels, scores = ssd300vgg16_output_to_human_format(BatchAns[i])
+            Print(BatchAns[i])
+            Print(boxes)
+            Print(labels)
+            Print(scores)
+            # print(ls)
 
-        boxes = BatchAns[i]['boxes'][:5]
-        ls =np.squeeze(BatchAns[i]['labels'].cpu().detach().numpy()[:5])
-        print(ls)
-        labels=  [str(l_) for l_ in labels_encoder.inverse_transform(ls)]
+            # labels=  [conf.from_category_id_to_category_name[l_] for l_ in labels_encoder.inverse_transform(ls)]
+            # labels=  [conf.from_category_id_to_category_name[l_] for l_ in ls]
 
-        # boxes = torch.unsqueeze(BatchAns[i]['boxes'][0],dim=0)
-        # labels=  [str(l_) for l_ in labels_encoder.inverse_transform([BatchAns[i]['labels'][0].cpu().detach().numpy()])]
-        imgwithboxes = draw_bounding_boxes(
-                image=read_image(el[0]),
-                boxes=boxes,
-                labels=labels,
-                colors="red",
-                width = 4,
-                font_size = 80
-                )
-        pil_ = to_pil_image(imgwithboxes)
-        imgs_.append(pil_)
-    
-    # imgs_ = [InsertBoxesToNpArrayXYXY(cv2.imread(el[0],cv2.IMREAD_COLOR),
-    #             boxes=BatchAns[i]['boxes'].cpu().detach().numpy()[0]) 
-    #             for i,el in zip(range(len(batch)),batch)]
-    plot_many_images(imgs_,OutDir='./Print/PredictedImages')
-    raise SystemExit
-    boxes
-    print(1)
+            # boxes = torch.unsqueeze(BatchAns[i]['boxes'][0],dim=0)
+            # labels=  [str(l_) for l_ in labels_encoder.inverse_transform([BatchAns[i]['labels'][0].cpu().detach().numpy()])]
+            imgwithboxes = draw_bounding_boxes(
+                    image=read_image(el[0]),
+                    boxes=boxes,
+                    labels=labels,
+                    colors="red",
+                    # width = 4,
+                    # font_size = 80
+                    )
+            pil_ = to_pil_image(imgwithboxes)
+            imgs_.append(pil_)
+            break
+        
+        # imgs_ = [InsertBoxesToNpArrayXYXY(cv2.imread(el[0],cv2.IMREAD_COLOR),
+        #             boxes=BatchAns[i]['boxes'].cpu().detach().numpy()[0]) 
+        #             for i,el in zip(range(len(batch)),batch)]
+        plot_many_images(imgs_,OutDir='./Print/PredictedImages')
+        raise SystemExit
+        boxes
+        print(1)
 
 
 

@@ -52,7 +52,7 @@ num_anchors = model.anchor_generator.num_anchors_per_location()
 channels_to_classification_head = det_utils.retrieve_out_channels(model.backbone,size=(300,300))
 model.head.classification_head = SSDClassificationHead(in_channels=channels_to_classification_head,
                                                        num_anchors=num_anchors,
-                                                       num_classes=3)
+                                                       num_classes=12)
 
 
 model.to(device)
@@ -72,7 +72,7 @@ TargetDict_to_model_input = lambda dict_: {
     }
 criterion = lambda classification_loss, regression_loss: classification_loss+regression_loss
 
-get_estimate_exec_time = lambda time_of_one_batch, index_of_batch,index_of_ep,NumOfBatches, num_of_EPOCHS: 'time left '+format((time_of_one_batch*(index_of_batch+1) + time_of_one_batch*NumOfBatches*index_of_ep)/3600,'.1E')+'h '+'total time '+format((time_of_one_batch*NumOfBatches*num_of_EPOCHS)/3600,'.1E')+'h' 
+get_estimate_exec_time = lambda time_of_one_batch, index_of_batch,index_of_ep,NumOfBatches, num_of_EPOCHS: 'time left '+str((time_of_one_batch*(index_of_batch+1) + time_of_one_batch*NumOfBatches*index_of_ep)/3600)[:5]+'h '+'total time '+str((time_of_one_batch*NumOfBatches*num_of_EPOCHS)/3600)[:5]+'h' 
 
 sprintf_loss = lambda lossfloat,ep_index,ep_index_max,BatchIndex,BatchIndexMax: str((
     'loss', format(lossfloat,'.1E'),

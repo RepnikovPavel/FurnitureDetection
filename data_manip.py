@@ -164,10 +164,7 @@ def get_detection_annotations():
         annotations.x,annotations.y,annotations.w,annotations.h 
         from images 
         join annotations 
-        on images.id = annotations.image_id and 
-        (annotations.category_id = 89 or
-        annotations.category_id = 80)
-        ;
+        on images.id = annotations.image_id;
     '''
     q_distribution_of_classes = '''
         select annotations.category_id as cid, categories.name as cname, count(categories.name) as namecount
@@ -188,7 +185,7 @@ def get_detection_annotations():
     #     ;
     # '''
     filepaths = np.unique([el[0] for el in response])
-    lables = np.unique([el[1]for el in response])
+    lables = np.unique([el[1] for el in response])
     #   DetectionDataNav[ImageFullPath]
     #       bboxes list
     #       lalels list
@@ -201,6 +198,15 @@ def get_detection_annotations():
         fp = os.path.join(dconf.all_images_folder,r[0])
         label = r[1]
         bbox = r[2:6]
+        x_ = bbox[0]
+        y_ = bbox[1]
+        w_ = bbox[2]
+        h_ = bbox[3]
+        if((y_ + h_-1 >= 520) or (x_+w_-1 >= 1101) or (w_<=0)or(h_<=0)):
+            print('error: W={} H={}  xywh box={}'.format(1101,520,bbox))
+            continue
+
+        
         BoxLabelByImgPath[fp]['boxes'].append(bbox)
         BoxLabelByImgPath[fp]['labels'].append(le.transform([label])[0])
     Print({
@@ -216,4 +222,3 @@ def get_detection_annotations():
 if __name__ == '__main__':
     # make_sql_tables_from_COCO_annotation()
     get_detection_annotations()
-    # print(1)

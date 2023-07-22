@@ -287,17 +287,17 @@ public class MoveAroundObject : MonoBehaviour
             var rect_ = box_.GetBoxIfInCameraView();
             // Debug.Log(rect_);
             if(rect_.width>=0.0f){
-                ObjRects.Add(objid_,rect_);
+                ObjRects.Add(objid_,crop_rect_to_screen_bounds(rect_));
                 ObjZ.Add(objid_,box_.CurrentZ);
             }
         }
-        var all_ids_ = ObjRects.Keys;
+        var all_possible_ids_ = ObjRects.Keys;
         var ToDatsetIds = new List<int>();
-        foreach(var objid in all_ids_){
+        foreach(var objid in all_possible_ids_){
             // is the current bbox nested in others?
             // if yes, and it is further away from the camera, then you do not need to draw or record it
             bool IsNotInside = true;
-            foreach(var anotherid in all_ids_){
+            foreach(var anotherid in all_possible_ids_){
                 if(objid == anotherid){
                     continue;
                 }
@@ -332,10 +332,13 @@ public class MoveAroundObject : MonoBehaviour
             foreach(var objid in ToDatsetIds){
                 // Debug.Log(objid);
                 var obj_ = ObjsBoxes[objid];
-                var rect_ = XldYldWH_TO_XtlYtlWH(ObjRects[objid]);
+                var rect_ = XldYldWH_TO_XtlYtlWH(crop_rect_to_screen_bounds(ObjRects[objid]));
                 var category_name = obj_.category;
                 // Debug.Log(category_name);
                 float[] bbox = new float[]{rect_.x,rect_.y,rect_.width,rect_.height};
+                //crop bbox to screen bounds
+
+
                 var category_id =  spawnercomp.Categories[category_name];
                 // Debug.Log(category_id);
                 dataset.annotations.Add(new annotation_cortege(){
@@ -381,7 +384,20 @@ public class MoveAroundObject : MonoBehaviour
         }
         MakeNextImage();
     }
-
+    Rect crop_rect_to_screen_bounds(Rect rect){
+        var viewport_rect = camera.pixelRect;
+        int width = (int)viewport_rect.width;
+        int height = (int)viewport_rect.height;
+        var x1 = rect.x;
+        var y1 = rect.y;
+        var x2 = x1 + rect.width;
+        var y2 = y1 + rect.height;
+        x1 = Mathf.Max(x1,0);
+        x2 = Mathf.Min(x2,width-1);
+        y1 = Mathf.Max(y1,0);
+        y2 = Mathf.Min(y2,height-1);
+        return new Rect(x:x1,y:y1,width:x2-x1+1,height: y2-y1+1);
+    }
     Rect XldYldWH_TO_XtlYtlWH(Rect rect){
         var viewport_rect= camera.pixelRect;
         return new Rect(rect.x,viewport_rect.height-rect.y-rect.height,rect.width,rect.height);
