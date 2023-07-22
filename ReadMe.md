@@ -58,8 +58,10 @@ $$
     precision_{i}^{*} = precision^{*}(bboxes[1:i],labels[1:i]) \\
     recall_{i}^{*} = recall^{*}(bboxes[1:i],labels[1:i]) \\ 
     precision(recall) = \{(precision_{i}^{*},recall_{i}^{*}),i=\overline{1,N}\} 
-$$
-The $precision^{*}$ is then defined as the number of true positives divided by the number of all detected boxes and the $recall^{*}$ is defined as the number of true positives divided by the number of all ground boxes.
+$$ 
+
+
+The \(precision^{*}\) is then defined as the number of true positives divided by the number of all detected boxes and the $recall^{*}$ is defined as the number of true positives divided by the number of all ground boxes.
 
 
 mAR (mean Average Recall)
@@ -280,8 +282,10 @@ Components:
 
 $$
     \mathcal{L} = \alpha \mathcal{L}_{classification} + \beta \mathcal{L}_{regression} ,\alpha =1,\beta=1
-$$  
-ep - epoch index    
+$$
+
+ep - epoch index
+
 ![Alt text](https://drive.google.com/uc?id=1zOdDklqslVyWtyXlNyOXUFx6rwzsA9Hz)
 
 <!-- <div id="iframeDiv">
