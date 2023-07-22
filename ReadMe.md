@@ -41,24 +41,29 @@ mAP (mean Average Precision)
 
 $$
     mAP = \frac{1}{n} \sum_{i=1}^{n}{AP_{i}}
-$$  
+$$    
 
-where $AP_{i}$ is the average precision for class $c_{i}$ and $n$ is the number of classes  
+where $AP_{i}$ is the average precision for class $c_{i}$ and $n$ is the number of classes    
 
 For one class:  
 AP (Average Precision)   
 
+
 $$
     AP = \sum_{i=1}^{N-1}{(R_{i+1}-R_{i})P_{i}} = \int_{0}^{1}{precision(recall)d(recall)}
-$$
-$N$ - the number of predictions for this class
+$$  
+
+
+$N$   - the number of predictions for this class  
+
+
 
 $$
     scores = \{s_{1},...,s_{N}\}, s_{i} \geq s_{i+1} \\
     precision_{i}^{*} = precision^{*}(bboxes[1:i],labels[1:i]) \\
     recall_{i}^{*} = recall^{*}(bboxes[1:i],labels[1:i]) \\ 
     precision(recall) = \{(precision_{i}^{*},recall_{i}^{*}),i=\overline{1,N}\} 
-$$ 
+$$   
 
 
 The \(precision^{*}\) is then defined as the number of true positives divided by the number of all detected boxes and the $recall^{*}$ is defined as the number of true positives divided by the number of all ground boxes.
