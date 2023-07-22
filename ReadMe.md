@@ -161,15 +161,15 @@ UnrealEngineOrUnity --> Get3dBoundingBoxed --> ProjectToTheCamera --> BBoxesOnIm
 ```
 
 
-# automatic detection of overlapping objects
+# automatic detection of overlapping objects  
 
-![Alt text](https://drive.google.com/uc?id=1vmhwPISZPl_SMDmELJStf2ZdctjGB_0I)
-![Alt text](https://drive.google.com/uc?id=1ie8QjnRgnC2kmKwQUaZB27P-hbp1MUjq)
+![Alt text](https://drive.google.com/uc?id=1vmhwPISZPl_SMDmELJStf2ZdctjGB_0I)  
+![Alt text](https://drive.google.com/uc?id=1ie8QjnRgnC2kmKwQUaZB27P-hbp1MUjq)  
 
 
-# changing the image registration conditions 
-![Alt text](https://drive.google.com/uc?id=1M-86XxdvFWy5j9qLpq9ca6YwteP2R5lX)
-![Alt text](https://drive.google.com/uc?id=1sgj5u6QWXvQ2uJyTZERU4rWuxdD4_72p)
+# changing the image registration conditions   
+![Alt text](https://drive.google.com/uc?id=1M-86XxdvFWy5j9qLpq9ca6YwteP2R5lX)  
+![Alt text](https://drive.google.com/uc?id=1sgj5u6QWXvQ2uJyTZERU4rWuxdD4_72p)  
 
 
 
@@ -279,13 +279,14 @@ Components:
 
 # Results  
 
-[link to dataset](https://disk.yandex.ru/d/oaPkIglpbI00CA)
+[link to dataset](https://disk.yandex.ru/d/oaPkIglpbI00CA)  
 
 ## class distribution  
+
 <!-- https://drive.google.com/file/d/1PHppoAl-wbw_8oo0DCwmzO9EM3lS10Vj/view?usp=drive_link -->
 ![Alt text](https://drive.google.com/uc?id=1PHppoAl-wbw_8oo0DCwmzO9EM3lS10Vj)
 
-## Values of the loss function during gradient descent  
+## Values of the loss function during gradient descent    
 
 $$
     L = \alpha L_{classification} + \beta L_{regression} ,\alpha =1,\beta=1
@@ -294,7 +295,8 @@ $$
 ep - epoch index  
 
 
-![Alt text](https://drive.google.com/uc?id=1zOdDklqslVyWtyXlNyOXUFx6rwzsA9Hz)  
+
+![Alt text](https://drive.google.com/uc?id=1zOdDklqslVyWtyXlNyOXUFx6rwzsA9Hz)    
 
 
 <!-- <div id="iframeDiv">
@@ -327,7 +329,8 @@ image --> model --> MulticlassNMS --> NMS
 
 model: SSD300_VGG16  
 
-![Alt text](https://drive.google.com/uc?id=1AAGMzuFqTDsyxQOgcIaKXr1VJhXKlluR)
+
+![Alt text](https://drive.google.com/uc?id=1AAGMzuFqTDsyxQOgcIaKXr1VJhXKlluR)  
 <!-- https://drive.google.com/file/d/1AAGMzuFqTDsyxQOgcIaKXr1VJhXKlluR/view?usp=drive_link -->
 
 
