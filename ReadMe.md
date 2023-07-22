@@ -63,14 +63,15 @@ $$
 $$  
 
 $$
-precision_{i}^{*} = precision^{*}(bboxes[1:i],labels[1:i])
+    precision_{i}^{*} = precision^{*}(bboxes[1:i],labels[1:i])
 $$  
 
 $$
-recall_{i}^{*} = recall^{*}(bboxes[1:i],labels[1:i])
-$$    
+    recall_{i}^{*} = recall^{*}(bboxes[1:i],labels[1:i])
+$$  
+    
 $$
-precision(recall) = \{(precision_{i}^{*},recall_{i}^{*}),i=\overline{1,N}\} 
+    precision(recall) = \{(precision_{i}^{*},recall_{i}^{*}),i=\overline{1,N}\} 
 $$     
 
 
