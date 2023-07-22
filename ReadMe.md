@@ -435,6 +435,13 @@ mean average recall for large objects
 insufficient noise of the training data. when collecting synthetic data, it is necessary to photograph objects from all possible distances. it is necessary to artificially include artifacts in the training sample, for example, text, small objects, images of other classes, etc.  
 
 
+# instructions for reproducing the result  
+
+1. unzip DATASET.zip  
+2. setup conf.py file
+3. run data_manip.py file  
+4. run TRAIN_ssd300_vgg16.py file
+5. run TEST_ssd300_vgg16.py file  
 
 # list of links
 1. [the best introductory lecture](https://www.youtube.com/watch?v=r2KA99ThEH4&list=PL5FkQ0AF9O_o2Eb5Qn8pwCDg7TniyV1Wb&index=7)
