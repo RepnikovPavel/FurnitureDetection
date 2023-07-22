@@ -16,10 +16,10 @@ $$
 
 **detection precision and recall**
 
-$TP$: $IOU>\alpha$ and $c_{predicted}=c_{ground \: truth}$ 
-$FP$: $IOU<\alpha$ or $c_{predicted} \neq c_{ground \: truth}$
-$FN$: $IOU < \alpha$  - the algorithm predict a box either outside the ground truth box of the object, or did not predict a box at all
-$TN$: the algorithm correctly did not pay attention to the specified area (box)
+$TP$: $IOU>\alpha$ and $c_{predicted}=c_{ground \: truth}$   
+$FP$: $IOU<\alpha$ or $c_{predicted} \neq c_{ground \: truth}$  
+$FN$: $IOU < \alpha$  - the algorithm predict a box either outside the ground truth box of the object, or did not predict a box at all  
+$TN$: the algorithm correctly did not pay attention to the specified area (box)  
 
 $$
     precision = \frac{TP}{TP+FP}
@@ -59,14 +59,22 @@ $N$   - the number of predictions for this class
 
 
 $$
-    scores = \{s_{1},...,s_{N}\}, s_{i} \geq s_{i+1} \\
-    precision_{i}^{*} = precision^{*}(bboxes[1:i],labels[1:i]) \\
-    recall_{i}^{*} = recall^{*}(bboxes[1:i],labels[1:i]) \\ 
+    scores = \{s_{1},...,s_{N}\}, s_{i} \geq s_{i+1}
+$$ 
+
+$$
+    precision_{i}^{*} = precision^{*}(bboxes[1:i],labels[1:i])
+$$
+
+$$
+    recall_{i}^{*} = recall^{*}(bboxes[1:i],labels[1:i])
+$$
+$$ 
     precision(recall) = \{(precision_{i}^{*},recall_{i}^{*}),i=\overline{1,N}\} 
 $$   
 
 
-The \(precision^{*}\) is then defined as the number of true positives divided by the number of all detected boxes and the $recall^{*}$ is defined as the number of true positives divided by the number of all ground boxes.
+The $precision^{*}$ is then defined as the number of true positives divided by the number of all detected boxes and the $recall^{*}$ is defined as the number of true positives divided by the number of all ground boxes.  
 
 
 mAR (mean Average Recall)
