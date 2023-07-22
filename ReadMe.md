@@ -62,15 +62,15 @@ $$
     scores = \{s_{1},...,s_{N}\}, s_{i} \geq s_{i+1}
 $$  
 
-$$  
-    precision_{i}^{*} = precision^{*}(bboxes[1:i],labels[1:i])
+$$
+precision_{i}^{*} = precision^{*}(bboxes[1:i],labels[1:i])
 $$  
 
-$$  
-    recall_{i}^{*} = recall^{*}(bboxes[1:i],labels[1:i])
-$$  
-$$ 
-    precision(recall) = \{(precision_{i}^{*},recall_{i}^{*}),i=\overline{1,N}\} 
+$$
+recall_{i}^{*} = recall^{*}(bboxes[1:i],labels[1:i])
+$$    
+$$
+precision(recall) = \{(precision_{i}^{*},recall_{i}^{*}),i=\overline{1,N}\} 
 $$     
 
 
