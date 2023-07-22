@@ -292,7 +292,7 @@ Components:
 ## Values of the loss function during gradient descent  
 
 $$
-    \mathcal{L} = \alpha \mathcal{L}_{classification} + \beta \mathcal{L}_{regression} ,\alpha =1,\beta=1
+    L = \alpha L_{classification} + \beta L_{regression} ,\alpha =1,\beta=1
 $$
 
 ep - epoch index
