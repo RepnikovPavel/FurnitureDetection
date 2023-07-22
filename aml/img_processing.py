@@ -187,13 +187,9 @@ img1_html = '''
 
 '''
 
-def plot_many_images(imgs:np.array,OutDir:str)->None:
-    # m - number of images along the matrix row index
-    # n - number of images along the matrix column index
-    if not os.path.exists(OutDir):
-        os.makedirs(OutDir)
-    else:
-        elements_of_dir = [os.path.join(OutDir,el) for el in os.listdir(OutDir)]
+def delete_content(dir:str):
+    if os.path.exists(dir):
+        elements_of_dir = [os.path.join(dir,el) for el in os.listdir(dir)]
         for el in elements_of_dir:
             try:
                 if os.path.isfile(el) or os.path.islink(el):
@@ -202,6 +198,12 @@ def plot_many_images(imgs:np.array,OutDir:str)->None:
                     shutil.rmtree(el)
             except Exception as e:
                 print('Failed to delete %s. Reason: %s' % (el, e))
+
+def plot_many_images(imgs:np.array,OutDir:str, start_index: int)->None:
+    # m - number of images along the matrix row index
+    # n - number of images along the matrix column index
+    if not os.path.exists(OutDir):
+        os.makedirs(OutDir)
     im2 = ''
     # toimg = transforms.ToPILImage()
     for i in range(len(imgs)):
@@ -213,7 +215,7 @@ def plot_many_images(imgs:np.array,OutDir:str)->None:
                 <li>
                     <img src="{}.png" alt="pink background" />
                 </li>'''.format(i)
-        imgs[i].save(os.path.join(OutDir,'{}.png'.format(i)))
+        imgs[i].save(os.path.join(OutDir,'{}.png'.format(start_index+i)))
         # cv2.imwrite(os.path.join(OutDir,'{}.png'.format(i)),imgs[i])
     with open(os.path.join(OutDir,'index.html'),'w') as f:
         f.write(img0_html+im2+img1_html)

@@ -60,6 +60,10 @@ $$
 mAR (mean Average Recall)
 
 
+# non - maximum supperssion  
+
+
+
 # general scheme  
 
 <!--  -->

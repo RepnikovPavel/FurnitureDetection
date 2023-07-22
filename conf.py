@@ -5,6 +5,8 @@ all_lables_location = os.path.join(r'/home/user/UnityProjects/MakeDataset/Assets
 sqlannotationsdb = os.path.join(data_folder,r'annotations.db')
 
 all_images_folder = os.path.join(r'/home/user/UnityProjects/MakeDataset/Assets/DATASET/IMAGES')
+font_file_ = r'/usr/share/fonts/fonts-go/Go-Bold-Italic.ttf'
+
 BoxesLabelsByPath_filename = os.path.join(data_folder,'BoxesLablesByPath.txt') 
 imgs_labels_encoder_filename = os.path.join(data_folder,'imgs_labels_encoder_filename.txt')
 
