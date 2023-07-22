@@ -335,6 +335,7 @@ public class MoveAroundObject : MonoBehaviour
                 var rect_ = XldYldWH_TO_XtlYtlWH(crop_rect_to_screen_bounds(ObjRects[objid]));
                 var category_name = obj_.category;
                 // Debug.Log(category_name);
+                // BUG box height and width can be negative
                 float[] bbox = new float[]{rect_.x,rect_.y,rect_.width,rect_.height};
                 //crop bbox to screen bounds
 

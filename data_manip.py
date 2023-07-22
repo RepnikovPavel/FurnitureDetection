@@ -166,13 +166,7 @@ def get_detection_annotations():
         join annotations 
         on images.id = annotations.image_id;
     '''
-    q_distribution_of_classes = '''
-        select annotations.category_id as cid, categories.name as cname, count(categories.name) as namecount
-        from annotations join categories on
-        cid = categories.id
-        group by cname
-        order by namecount;
-    '''
+
     connection = sqlite3.connect(dconf.sqlannotationsdb)
     cursor = connection.cursor()
     cursor.execute(q0)
@@ -219,6 +213,27 @@ def get_detection_annotations():
     cursor.close()
     connection.close()
 
+def get_class_distrib():
+    q0 = '''
+        select annotations.category_id as cid, categories.name as cname, count(categories.name) as namecount
+        from annotations join categories on
+        cid = categories.id
+        group by cname
+        order by namecount;
+    '''
+    connection = sqlite3.connect(dconf.sqlannotationsdb)
+    cursor = connection.cursor()
+    cursor.execute(q0)
+    response = cursor.fetchall()
+    o_counts = []
+    o_labels= []
+    for r in response:
+        o_counts.append(r[2])
+        o_labels.append(r[1])
+    cursor.close()
+    connection.close()
+    return o_labels,o_counts
+
 if __name__ == '__main__':
-    # make_sql_tables_from_COCO_annotation()
+    make_sql_tables_from_COCO_annotation()
     get_detection_annotations()

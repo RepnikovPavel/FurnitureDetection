@@ -55,6 +55,7 @@ $$
     recall_{i}^{*} = recall^{*}(bboxes[1:i],labels[1:i]) \\ 
     precision(recall) = \{(precision_{i}^{*},recall_{i}^{*}),i=\overline{1,N}\} 
 $$
+The $precision^{*}$ is then defined as the number of true positives divided by the number of all detected boxes and the $recall^{*}$ is defined as the number of true positives divided by the number of all ground boxes.
 
 
 mAR (mean Average Recall)
@@ -262,6 +263,132 @@ Components:
 ]
 
 ```
+
+# Results  
+
+[link to dataset](https://disk.yandex.ru/d/oaPkIglpbI00CA)
+
+## class distribution 
+<!-- https://drive.google.com/file/d/1PHppoAl-wbw_8oo0DCwmzO9EM3lS10Vj/view?usp=drive_link -->
+![Alt text](https://drive.google.com/uc?id=1PHppoAl-wbw_8oo0DCwmzO9EM3lS10Vj)
+
+## Values of the loss function during gradient descent  
+
+$$
+    \mathcal{L} = \alpha \mathcal{L}_{classification} + \beta \mathcal{L}_{regression} ,\alpha =1,\beta=1
+$$
+ep - epoch index  
+![Alt text](https://drive.google.com/uc?id=1zOdDklqslVyWtyXlNyOXUFx6rwzsA9Hz)
+
+<!-- <div id="iframeDiv">
+    <iframe src="https://drive.google.com/uc?id=1PvLDLon4oqIJbpUwf-hf9VA5A4Aw-WVy" iframetag style="width:1600px;height:900px;background color:red"></iframe>
+</div> -->
+
+<!-- ![fig](https://drive.google.com/uc?id=1PvLDLon4oqIJbpUwf-hf9VA5A4Aw-WVy) -->
+
+<!-- <p><a href="https://drive.google.com/uc?id=1PvLDLon4oqIJbpUwf-hf9VA5A4Aw-WVy" target="iframe_a">W3Schools.com</a></p>
+https://drive.google.com/file/d/1PvLDLon4oqIJbpUwf-hf9VA5A4Aw-WVy/view?usp=drive_link -->
+
+<!-- https://drive.google.com/file/d/1PvLDLon4oqIJbpUwf-hf9VA5A4Aw-WVy/view?usp=sharing -->
+<!-- https://drive.google.com/uc?id=1M-86XxdvFWy5j9qLpq9ca6YwteP2R5lX -->
+<!-- 
+<div w3-include-html="../ds_project_data/train_log/lossfigure.html"></div>
+<a href="../ds_project_data/train_log/lossfigure.html" rel="import"> </a> -->
+
+
+## mAP(train dataset)  
+model: SSD300_VGG16
+![Alt text](https://drive.google.com/uc?id=1AAGMzuFqTDsyxQOgcIaKXr1VJhXKlluR)
+<!-- https://drive.google.com/file/d/1AAGMzuFqTDsyxQOgcIaKXr1VJhXKlluR/view?usp=drive_link -->
+
+
+| map               | 0.5197 | global mean average precision                                                                           |
+|-------------------|--------|---------------------------------------------------------------------------------------------------------|
+| map_small         | 0.6083 | mean average precision for small objects                                                                |
+| map_medium        | 0.5975 | mean average precision for medium objects                                                               |
+| map_large         | 0.6817 | mean average precision for large objects                                                                |
+| mar_1             | 0.4407 | mean average recall for 1 detection per image                                                           |
+| mar_10            | -1.0   | mean average recall for 10 detections per image                                                         |
+| mar_100           | 0.2553 | mean average recall for 100 detections per image                                                        |
+| mar_small         | 0.4952 | mean average recall for small objects                                                                   |
+| mar_medium        | 0.5443 | mean average recall for medium objects                                                                  |
+| mar_large         | 0.5443 | mean average recall for large objects                                                                   |
+| map_50            | -1.0   | (-1 if 0.5 not in the list of iou thresholds), mean average precision at IoU=0.50                       |
+| map_75            | 0.7025 | (-1 if 0.75 not in the list of iou thresholds), mean average precision at IoU=0.75                      |
+| map_per_class     | 0.4645 | (-1 if class metrics are disabled), mean average precision per observed class                           |
+| mar_100_per_class | 0.2914 | (-1 if class metrics are disabled), mean average recall for 100 detections per image per observed class |
+<!-- 0.5197
+0.6083
+0.5975
+0.6817
+0.4407
+-1.0
+0.2553
+0.4952
+0.5443
+0.5443
+-1.0
+0.7025
+0.4645
+0.2914
+
+a 
+a
+a
+a
+
+
+| map    
+| map_small            
+| map_medium            
+| map_large            
+| mar_1        
+| mar_10        
+| mar_100        
+| mar_small            
+| mar_medium            
+| mar_large            
+| map_50        
+| map_75        
+| map_per_class                
+| mar_100_per_class                    
+
+
+
+global mean average precision
+mean average precision for small objects
+mean average precision for medium objects
+mean average precision for large objects
+mean average recall for 1 detection per image
+mean average recall for 10 detections per image
+mean average recall for 100 detections per image
+mean average recall for small objects
+mean average recall for medium objects
+mean average recall for large objects
+(-1 if 0.5 not in the list of iou thresholds), mean average precision at IoU=0.50
+(-1 if 0.75 not in the list of iou thresholds), mean average precision at IoU=0.75
+(-1 if class metrics are disabled), mean average precision per observed class
+(-1 if class metrics are disabled), mean average recall for 100 detections per image per observed class -->
+
+
+<!-- 
+{'classes': tensor([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10], dtype=torch.int32),
+ 'map': tensor(0.5197),
+ 'map_50': tensor(0.6083),
+ 'map_75': tensor(0.5975),
+ 'map_large': tensor(0.6817),
+ 'map_medium': tensor(0.4407),
+ 'map_per_class': tensor(-1.),
+ 'map_small': tensor(0.2553),
+ 'mar_1': tensor(0.4952),
+ 'mar_10': tensor(0.5443),
+ 'mar_100': tensor(0.5443),
+ 'mar_100_per_class': tensor(-1.),
+ 'mar_large': tensor(0.7025),
+ 'mar_medium': tensor(0.4645),
+ 'mar_small': tensor(0.2914)
+ } -->
+
 
 
 # list of links

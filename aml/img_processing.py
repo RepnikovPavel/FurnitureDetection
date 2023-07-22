@@ -217,9 +217,9 @@ def plot_many_images(imgs:np.array,OutDir:str, start_index: int)->None:
                 </li>'''.format(i)
         imgs[i].save(os.path.join(OutDir,'{}.png'.format(start_index+i)))
         # cv2.imwrite(os.path.join(OutDir,'{}.png'.format(i)),imgs[i])
-    with open(os.path.join(OutDir,'index.html'),'w') as f:
-        f.write(img0_html+im2+img1_html)
-    os.system('google-chrome {}'.format(os.path.join(OutDir,'index.html')))
+    # with open(os.path.join(OutDir,'index.html'),'w') as f:
+    #     f.write(img0_html+im2+img1_html)
+    # os.system('google-chrome {}'.format(os.path.join(OutDir,'index.html')))
 
     # fig,axs = plt.subplots(nrows=m, ncols=n)
     # for k in range(m*n):

@@ -1,3 +1,6 @@
+# COMPUTE mAP
+# DRAW and RECORD model detections and test images
+
 import conf
 from UI.LOG import *
 import cv2
@@ -40,7 +43,10 @@ from torchvision.utils import draw_bounding_boxes
 from torchvision.io.image import read_image
 from torchvision.transforms.functional import to_pil_image
 from torchvision.ops import nms 
+from torchmetrics.detection.mean_ap import MeanAveragePrecision as mAP
+
 warnings.filterwarnings("ignore", category=DeprecationWarning) 
+
 
 BoxLabelByImgURL = torch.load(conf.BoxesLabelsByPath_filename)
 
@@ -90,10 +96,13 @@ def ssd300vgg16_remove_background_labels(ans: Dict[str,Any]) -> Tuple[torch.tens
     boxes_ = []  # 
     labels_ = [] # List[str]
     scores_ = [] # List[np.float32]
-    print(ls)
+    # print(ls)
+    if len(ls.shape)==0:
+        ls = np.array([ls])
+        scores = np.array([scores])
     for i in range(ls.shape[0]):
         if ls[i] != conf.background_label:
-            labels_.append(conf.from_category_id_to_category_name[labels_encoder.inverse_transform([ls[i]])[0]])
+            labels_.append(labels_encoder.inverse_transform([ls[i]])[0])
             boxes_.append(boxes[i].cpu().detach().numpy())
             scores_.append(scores[i])
     return torch.tensor(np.array(boxes_)).requires_grad_(False), np.array(labels_), torch.tensor(scores_).requires_grad_(False)
@@ -142,8 +151,14 @@ def NMS(boxes,labels,scores, iou_threshold):
 
 delete_content('./Print/PredictedImages')
 last_img_i_ = 0
+
+preds_ = []
+targets_= []
+metric = mAP(box_format='xyxy',iou_type='bbox')
+
 with torch.no_grad():
     for b_i,batch in zip(range(len(BathcesOfPairs)),BathcesOfPairs):
+        print('{}/{}'.format(b_i,len(batch)-1))
         # GET batch
         # tagret: List[Dict['boxes','labels']]
         # input to model : List[image tensor]
@@ -162,6 +177,17 @@ with torch.no_grad():
             boxes, labels, scores = ssd300vgg16_remove_background_labels(BatchAns[i])
             boxes_,labels_,scores_ = multiclass_NMS(boxes=boxes,labels=labels,scores=scores,iou_threshold=0.1)
             boxes_,labels_,scores_ = NMS(boxes_,labels_,scores_,iou_threshold=0.1)
+            preds_.append({
+                'boxes':boxes_,
+                'scores':scores_,
+                'labels':torch.tensor(labels_).requires_grad_(False)
+            })
+            targets_.append({
+                'boxes': targets[i]['boxes'].cpu().detach(),
+                'labels': targets[i]['labels'].cpu().detach()
+            })
+            # Print(labels_)
+            # Print(scores_)
             # print('number of dropped detections {}'.format(len(labels)-len(labels_)))
             # print(labels_)
             # nms_ = nms(boxes=boxes,scores=scores,iou_threshold=0.6)
@@ -175,7 +201,7 @@ with torch.no_grad():
             imgwithboxes = draw_bounding_boxes(
                     image=read_image(el[0]),
                     boxes=boxes_,
-                    labels=labels_,
+                    labels=[conf.from_category_id_to_category_name[el] for el in labels_],
                     colors="red",
                     # width = 4,
                     # font_size = 80,
@@ -183,13 +209,22 @@ with torch.no_grad():
                     )
             pil_ = to_pil_image(imgwithboxes)
             imgs_.append(pil_)
-        
+
+        # metric.update(preds_,targets_)
+        # Print(metric.compute())
+
         # imgs_ = [InsertBoxesToNpArrayXYXY(cv2.imread(el[0],cv2.IMREAD_COLOR),
         #             boxes=BatchAns[i]['boxes'].cpu().detach().numpy()[0]) 
         #             for i,el in zip(range(len(batch)),batch)]
         plot_many_images(imgs_,OutDir='./Print/PredictedImages',start_index=last_img_i_)
         last_img_i_+=len(batch)
-
+        # Print(metric.forward(preds = preds_,target= targets_))
+        # raise SystemExit
+    metric.update(preds_,targets_)
+    Print(metric.compute())
+    # metric info https://torchmetrics.readthedocs.io/en/stable/detection/mean_average_precision.html
+    fig_, ax_ = metric.plot()
+    plt.show()
 
 
         
