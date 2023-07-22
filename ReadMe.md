@@ -316,14 +316,16 @@ https://drive.google.com/file/d/1PvLDLon4oqIJbpUwf-hf9VA5A4Aw-WVy/view?usp=drive
 
   
 
-## non - maximum supperssion  
+## post processing  
 
 ```mermaid
 graph LR
 image --> model --> MulticlassNMS --> NMS  
 ```
 
+## model predictins on train data  
 
+[predictions](https://disk.yandex.ru/d/oaPkIglpbI00CA)
 
 ## mAP(train dataset)  
 
@@ -420,6 +422,14 @@ mean average recall for large objects
  'mar_medium': tensor(0.4645),
  'mar_small': tensor(0.2914)
  } -->
+
+  
+# test model in the real world  
+
+[model predictions](https://disk.yandex.ru/d/oaPkIglpbI00CA)
+
+# problems of transferring a model trained on synthetic data 
+insufficient noise of the training data. when collecting synthetic data, it is necessary to photograph objects from all possible distances. it is necessary to artificially include artifacts in the training sample, for example, text, small objects, images of other classes, etc.  
 
 
 

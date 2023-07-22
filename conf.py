@@ -4,6 +4,8 @@ data_folder = r'/home/user/ds_project_data'
 all_lables_location = os.path.join(r'/home/user/UnityProjects/MakeDataset/Assets/DATASET/ANNOTATIONS/annotations.json') 
 sqlannotationsdb = os.path.join(data_folder,r'annotations.db')
 
+
+real_images_folder = os.path.join(data_folder,r'REAL_IMAGES')
 all_images_folder = os.path.join(r'/home/user/UnityProjects/MakeDataset/Assets/DATASET/IMAGES')
 font_file_ = r'/usr/share/fonts/fonts-go/Go-Bold-Italic.ttf'
 
