@@ -72,7 +72,7 @@ $$
 $$     
 
 
-The $precision^{*}$ is then defined as the number of true positives divided by the number of all detected boxes and the $recall^{*}$ is defined as the number of true positives divided by the number of all ground boxes.  
+The $precision^{\star}$ is then defined as the number of true positives divided by the number of all detected boxes and the $recall^{\star}$ is defined as the number of true positives divided by the number of all ground boxes.  
 
 
 mAR (mean Average Recall)
