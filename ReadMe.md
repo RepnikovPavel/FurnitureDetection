@@ -75,10 +75,6 @@ $$
 The $precision^{\star}$ is then defined as the number of true positives divided by the number of all detected boxes and the $recall^{\star}$ is defined as the number of true positives divided by the number of all ground boxes.  
 
 
-mAR (mean Average Recall)
-
-
-# non - maximum supperssion  
 
 
 
@@ -315,6 +311,16 @@ https://drive.google.com/file/d/1PvLDLon4oqIJbpUwf-hf9VA5A4Aw-WVy/view?usp=drive
 <!-- 
 <div w3-include-html="../ds_project_data/train_log/lossfigure.html"></div>
 <a href="../ds_project_data/train_log/lossfigure.html" rel="import"> </a> -->
+
+  
+
+## non - maximum supperssion  
+
+```mermaid
+graph LR
+image --> model --> MulticlassNMS --> NMS  
+```
+
 
 
 ## mAP(train dataset)  
