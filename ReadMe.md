@@ -23,13 +23,16 @@ $TN$: the algorithm correctly did not pay attention to the specified area (box)
 
 $$
     precision = \frac{TP}{TP+FP}
-$$
+$$  
+
 $$
     recall  = \frac{TP}{TP+FN}
-$$
+$$  
+
 $$ 
     F_{\beta} = (1+\beta^{2})\frac{precision \cdot recall}{(\beta^{2} \cdot precision)+recall}
-$$
+$$  
+
 
 $TP$ - number of hitting the targets
 $FN$ - number of skipping targets
