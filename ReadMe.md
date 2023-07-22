@@ -22,8 +22,12 @@ $FN$: $IOU < \alpha$  - the algorithm predict a box either outside the ground tr
 $TN$: the algorithm correctly did not pay attention to the specified area (box)
 
 $$
-    precision = \frac{TP}{TP+FP} \\ 
-    recall  = \frac{TP}{TP+FN}  \\ 
+    precision = \frac{TP}{TP+FP}
+$$
+$$
+    recall  = \frac{TP}{TP+FN}
+$$
+$$ 
     F_{\beta} = (1+\beta^{2})\frac{precision \cdot recall}{(\beta^{2} \cdot precision)+recall}
 $$
 
@@ -276,8 +280,8 @@ Components:
 
 $$
     \mathcal{L} = \alpha \mathcal{L}_{classification} + \beta \mathcal{L}_{regression} ,\alpha =1,\beta=1
-$$
-ep - epoch index  
+$$  
+ep - epoch index    
 ![Alt text](https://drive.google.com/uc?id=1zOdDklqslVyWtyXlNyOXUFx6rwzsA9Hz)
 
 <!-- <div id="iframeDiv">
