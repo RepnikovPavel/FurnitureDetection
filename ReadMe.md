@@ -53,23 +53,20 @@ $$
     AP = \sum_{i=1}^{N-1}{(R_{i+1}-R_{i})P_{i}} = \int_{0}^{1}{precision(recall)d(recall)}
 $$  
 
-
 $N$   - the number of predictions for this class  
-
-
 
 $$
     scores = \{s_{1},...,s_{N}\}, s_{i} \geq s_{i+1}
 $$  
-
+___
 $$
     precision_{i}^{*} = precision^{*}(bboxes[1:i],labels[1:i])
 $$  
-
+___
 $$
     recall_{i}^{*} = recall^{*}(bboxes[1:i],labels[1:i])
 $$  
-    
+___
 $$
     precision(recall) = \{(precision_{i}^{*},recall_{i}^{*}),i=\overline{1,N}\} 
 $$     
